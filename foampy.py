@@ -177,15 +177,15 @@ def load_sample_xy(casedir="", profile="U"):
         folder = "postProcessing/sets"
     t = []
     times = os.listdir(folder)
-    for time in times:
+    for time1 in times:
         try: 
-            float(time)
+            float(time1)
         except ValueError: 
-            times.remove(time)
+            times.remove(time1)
         try:
-            t.append(int(time))
+            t.append(int(time1))
         except ValueError:
-            t.append(float(time))
+            t.append(float(time1))
     t.sort()
     # Load a y vector from a single file since they are identical
     with open(folder+"/0/profile_"+profile+".xy") as f:

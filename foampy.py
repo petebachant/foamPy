@@ -190,7 +190,6 @@ def load_sample_xy(casedir="", profile="U"):
     # Load a y vector from a single file since they are identical
     with open(folder+"/0/profile_"+profile+".xy") as f:
         y = np.loadtxt(f)[:,0]
-    i = 0
     if profile == "U":
         u = np.zeros((len(y), len(times)))
         v = np.zeros((len(y), len(times)))

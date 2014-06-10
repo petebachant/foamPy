@@ -455,7 +455,7 @@ def read_log_end(logname, nlines=20):
             else:
                 block -= 1
     log = data.splitlines()[-window:]
-    return log
+    return [line.decode("utf-8") for line in log]
 
 def main():
     """Testing things."""

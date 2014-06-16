@@ -425,6 +425,12 @@ class ProgressBar(QtGui.QWidget):
     def on_finished(self):
         sys.exit()
 
+def make_progress_bar():
+    app = QtGui.QApplication(sys.path)
+    pbarwin = ProgressBar()
+    pbarwin.show()
+    app.exec_()
+
 def read_log_end(logname, nlines=20):
     """Read last lines from log and return as a list."""
     window = nlines

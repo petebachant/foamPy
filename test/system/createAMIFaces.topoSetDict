@@ -1,0 +1,110 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.2.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    {
+        name    AMIsurface_z;
+        type    cellSet;
+        action  new;
+        source  cylinderToCell;
+        sourceInfo
+        {
+            p1      (0 0 -0.75); // Was (0 0 -0.5)
+            p2      (0 0  0.75); // Was (0 0 0.5)
+            radius  0.65;
+        }
+    }
+    {
+        name    outerCells;
+        type    cellSet;
+        action  new;
+        source  cellToCell;
+        sourceInfo
+        {
+            set AMIsurface_z;
+        }
+    }
+    {
+        name    outerCells;
+        type    cellSet;
+        action  invert;
+    }
+
+    {
+        name    AMIsurface_z;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set     AMIsurface_z;
+        }
+    }
+
+
+
+    {
+        name    AMIsurface_zFace;
+        type    faceSet;
+        action  new;
+        source  cellToFace;
+        sourceInfo
+        {
+            set     AMIsurface_z;
+            option  all;
+        }
+    }
+    {
+        name    AMIsurface_zFace;
+        type    faceSet;
+        action  subset;
+        source  cellToFace;
+        sourceInfo
+        {
+            set     outerCells;
+            option  all;
+        }
+    }
+    {
+        name    AMIsurface_z;
+        type    faceZoneSet;
+        action  new;
+        source  setsToFaceZone;
+        sourceInfo
+        {
+            faceSet     AMIsurface_zFace;
+            cellSet     AMIsurface_z;
+        }
+    }
+
+
+    // Dummy faceSet for creating initial patches
+    {
+        name    dummyFaces;
+        type    faceSet;
+        action  new;
+        source  labelToFace;
+        sourceInfo
+        {
+            value ();
+        }
+    }
+
+);
+
+// ************************************************************************* //

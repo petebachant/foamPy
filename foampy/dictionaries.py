@@ -51,7 +51,7 @@ def replace_value(dictpath, keyword, newvalue):
         new_text = lines[:nstart] + [newvalue] + lines[nstart+1:]
     else:
         new_text = lines[:nstart] + [newvalue] + lines[nend+1:]
-    with open(dictpath+"test", "w") as f:
+    with open(dictpath, "w") as f:
         for line in new_text:
             f.write(line)
 

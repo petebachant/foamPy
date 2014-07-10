@@ -28,10 +28,11 @@ vertices
     (-1.50  1.83  1.22) // 6
     (-1.50 -1.83  1.22) // 7 
 );
+
 blocks
 (
     hex (0 1 2 3 4 5 6 7)
-    (66 66 44) // Last dimension should be divisible by 4, first 2 should be 1.5 times last
+    (66 66 44)
     simpleGrading (1 1 1)
 );
 

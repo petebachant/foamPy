@@ -230,6 +230,15 @@ def get_endtime():
                 endtime = float(line[1])
     return endtime
     
+def get_deltat():
+    """Get run deltaT"""
+    with open("system/controlDict", "r") as f:
+        for line in f.readlines():
+            line = line.replace(";", "").split()
+            if "deltaT" in line and line[0] == "deltaT":
+                deltat = float(line[1])
+    return deltat
+    
 def read_dict(dictname, casedir=""):
     """Read an OpenFOAM dict into a Python dict. Right now this is quite
     crude, but gets the job done decently for 1 word parameters."""
@@ -386,7 +395,10 @@ class ProgressThread(QtCore.QThread):
             except IndexError:
                 t, deltat, exectime = get_solver_times(solver, window=2000)
                 t_per_step = exectime[-1] - exectime[-2]
-            deltat = deltat[-1]
+            try:
+                deltat = deltat[-1]
+            except IndexError:
+                deltat = get_deltat()
             self.part_done.emit(int(t[-1]/endtime*100))
             self.timeleft_solverate.emit([(endtime - t[-1]), t_per_step/deltat/3600])
             time.sleep(1)

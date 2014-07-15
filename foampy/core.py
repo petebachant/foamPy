@@ -247,6 +247,14 @@ def get_ncells(logname="log.checkMesh", keyword="cells"):
             if ls and ls[0] == keyword:
                 value = ls[1]
                 return int(value)
+                
+def get_max_courant_no():
+    with open("system/controlDict") as f:
+        for line in f.readlines():
+            if ";" in line:
+                ls = line.replace(";", " ").split()
+                if ls[0] == "maxCo":
+                    return float(ls[1])
     
 def read_dict(dictname, casedir=""):
     """Read an OpenFOAM dict into a Python dict. Right now this is quite

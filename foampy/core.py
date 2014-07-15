@@ -239,6 +239,16 @@ def get_deltat():
                 deltat = float(line[1])
     return deltat
     
+def get_ncells(logname="log.checkMesh", keyword="cells"):
+    if keyword == "cells":
+        keyword = "cells:"
+    with open(logname) as f:
+        for line in f.readlines():
+            ls = line.split()
+            if ls and ls[0] == keyword:
+                value = ls[1]
+                return int(value)
+    
 def read_dict(dictname, casedir=""):
     """Read an OpenFOAM dict into a Python dict. Right now this is quite
     crude, but gets the job done decently for 1 word parameters."""

@@ -14,8 +14,7 @@ from PyQt4 import QtCore, QtGui
 import datetime
 import sys
 import time
-
-system_dicts = ["controlDict", "snappyHexMeshDict", "fvSchemes", "fvSolution"]
+from .dictionaries import system_dicts, constant_dicts
 
 
 def load_torque_drag_old(casedir="", folder="0", filename=None):
@@ -255,6 +254,8 @@ def read_dict(dictname, casedir=""):
     foamdict = {}
     if dictname in system_dicts:
         p = "system/" + dictname
+    elif dictname in constant_dicts:
+        p = "constant/" + dictname
     elif dictname == "blockMeshDict":
         p = "constant/polyMesh/" + dictname
     with open(p) as f:

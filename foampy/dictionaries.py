@@ -8,6 +8,11 @@ OpenFOAM. I'm not sure how it compares with PyFoam.
 """
 from __future__ import division, print_function
 
+
+system_dicts = ["controlDict", "snappyHexMeshDict", "fvSchemes", "fvSolution"]
+constant_dicts = ["dynamicMeshDict", "RASProperties", "transportProperties",
+                  "turbulenceProperties"]
+
     
 def build_header(dictobject, version="2.3.x", fileclass="dictionary"):
     """Creates the header for an OpenFOAM dictionary. Inputs are the 

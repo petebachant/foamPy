@@ -411,6 +411,8 @@ class ProgressThread(QtCore.QThread):
             t, deltat, exectime = get_solver_times(solver)
             try:
                 t_per_step = exectime[-1] - exectime[-2]
+                tps2 = exectime[-2] - exectime[-3]
+                t_per_step = (t_per_step + tps2)/2
             except IndexError:
                 t, deltat, exectime = get_solver_times(solver, window=2000)
                 t_per_step = exectime[-1] - exectime[-2]

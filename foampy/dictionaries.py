@@ -76,9 +76,28 @@ def read_text(dictpath, keyword):
                 in_block = False
                 nend = n
     return lines[nstart:nend+1]
+    
+def read_single_line_value(dictname, objname, valtype=float, casedir=""):
+    if casedir:
+        p = casedir + "/"
+    else:
+        p = ""
+    if dictname in constant_dicts:
+        p += "constant/" + dictname
+    elif dictname in system_dicts:
+        p += "system/" + dictname
+    elif dictname == "blockMeshDict":
+        p += "constant/polyMesh/blockMeshDict"
+    with open(p) as f:
+        for line in f.readlines():
+            if ";" in line:
+                ls = line.replace(";", " ").split()
+                if ls[0] == objname:
+                    return valtype(ls[1])
 
 
 if __name__ == "__main__":
-    print(read_text("../test/constant/polyMesh/blockMeshDict", "blocks"))
+    print(read_single_line_value("blockMeshDict", "convertToMeters",
+                                 casedir="../test"))
     
 

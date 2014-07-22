@@ -65,6 +65,67 @@ def load_torque_drag_old(casedir="", folder="0", filename=None):
     torque = np.asarray(np.asarray(mpz) + np.asarray(mvz))
     drag = np.asarray(np.asarray(fpx) + np.asarray(fvx))
     return t, torque, drag
+    
+def load_forces_moments(casedir="", folder="0", filename=None):
+    """Loads time, forces, and moments into a dictionary of Numpy arrays."""
+    # Create empty lists
+    t = []
+    fpx = []; fpy = []; fpz = []
+    fpox = []; fpoy = []; fpoz = []
+    fvx = []; fvy = []; fvz = []
+    mpx = []; mpy = []; mpz = []
+    mpox = []; mpoy = []; mpoz = []
+    mvx = []; mvy = []; mvz = []
+    # Cycle through file
+    if casedir: casedir += "/"
+    if not filename: filename = "forces.dat"
+    with open(casedir+"postProcessing/forces/"+str(folder)+"/"+filename, "r") as f:
+        for line in f.readlines():
+            line = line.replace("(", "")
+            line = line.replace(")", "")
+            line = line.replace(",", " ")
+            line = line.split()
+            if line[0] != "#":
+                t.append(float(line[0]))
+                fpx.append(float(line[1]))
+                fpy.append(float(line[2]))
+                fpz.append(float(line[3]))
+                fvx.append(float(line[4]))
+                fvy.append(float(line[5]))
+                fvz.append(float(line[6]))
+                fpox.append(float(line[7]))
+                fpoy.append(float(line[8]))
+                fpoz.append(float(line[9]))
+                mpx.append(float(line[10]))
+                mpy.append(float(line[11]))
+                mpz.append(float(line[12]))
+                mvx.append(float(line[13]))
+                mvy.append(float(line[14]))
+                mvz.append(float(line[15]))
+                mpox.append(float(line[16]))
+                mpoy.append(float(line[17]))
+                mpoz.append(float(line[18]))
+    #Convert to numpy arrays
+    data = {"time" : np.asarray(t),
+            "force" : {"pressure" : {"x" : np.asarray(fpx),
+                                     "y" : np.asarray(fpy),
+                                     "z" : np.asarray(fpz)},
+                       "viscous" : {"x" : np.asarray(fvx),
+                                    "y" : np.asarray(fvy),
+                                    "z" : np.asarray(fvz)},
+                       "porous" : {"x" : np.asarray(fpox),
+                                   "y" : np.asarray(fpoy),
+                                   "z" : np.asarray(fpoz)}},
+            "moment" : {"pressure" : {"x" : np.asarray(mpx),
+                                      "y" : np.asarray(mpy),
+                                      "z" : np.asarray(mpz)},
+                        "viscous" : {"x" : np.asarray(mvx),
+                                     "y" : np.asarray(mvy),
+                                    "z" : np.asarray(mvz)},
+                        "porous" : {"x" : np.asarray(mpox),
+                                    "y" : np.asarray(mpoy),
+                                    "z" : np.asarray(mpoz)}}}        
+    return data
 
 def load_torque_drag(casedir="", folder="0", filename=None, 
                      torque_axis="z", drag_axis="x"):

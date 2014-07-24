@@ -227,7 +227,43 @@ def load_theta_omega(casedir="", t_interp=None, theta_units="degrees"):
         theta = np.interp(t_interp, t, theta)
     if theta_units == "degrees":
         theta = theta/np.pi*180
-    return t, theta, omega 
+    return t, theta, omega
+    
+def load_set(casedir="", name="profile", quantity="U", fmt="xy", axis="xyz"):
+    """Imports text data created with the OpenFOAM sample utility"""
+    if casedir != "":
+        folder = casedir + "/postProcessing/sets"
+    else:
+        folder = "postProcessing/sets"
+    t = []
+    times = os.listdir(folder)
+    for time1 in times:
+        try: 
+            float(time1)
+        except ValueError: 
+            times.remove(time1)
+        try:
+            t.append(int(time1))
+        except ValueError:
+            t.append(float(time1))
+    t.sort()
+    data = {"time" : t}
+    for ts in t:
+        filename = "{folder}/{time}/{name}_{q}.{fmt}".format(folder=folder,
+            time=ts, name=name, q=quantity, fmt=fmt)
+        with open(filename) as f:
+            d = np.loadtxt(f)
+            if quantity == "U":
+                data[ts] = {"u" : d[:, len(axis)],
+                            "v" : d[:, len(axis)+1],
+                            "w" : d[:, len(axis)+2]}
+                if len(axis) == 1:
+                    data[ts][axis] = d[:,0]
+                else:
+                    data[ts]["x"] = d[:,0]
+                    data[ts]["y"] = d[:,1]
+                    data[ts]["z"] = d[:,2]
+    return data
     
 def load_sample_xy(casedir="", profile="U"):
     """Imports text data created with the OpenFOAM sample utility"""

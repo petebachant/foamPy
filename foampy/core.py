@@ -555,11 +555,47 @@ class ProgressBar(QtGui.QWidget):
     def on_finished(self):
         sys.exit()
 
-def make_progress_bar():
-    app = QtGui.QApplication(sys.path)
-    pbarwin = ProgressBar()
-    pbarwin.show()
-    app.exec_()
+def make_progress_bar(gui=True):
+    if gui:
+        app = QtGui.QApplication(sys.path)
+        pbarwin = ProgressBar()
+        pbarwin.show()
+        app.exec_()
+    else:
+        controldict = read_dict("controlDict")
+        solver = controldict["application"]
+        endtime = float(controldict["endTime"])
+        done = False
+        try:
+            while not done:
+                for d in os.listdir("./"):
+                    try:
+                        if float(d) == endtime:
+                            done = True
+                    except:
+                        pass
+                t, deltat, exectime = get_solver_times(solver)
+                try:
+                    t_per_step = exectime[-1] - exectime[-2]
+                    tps2 = exectime[-2] - exectime[-3]
+                    t_per_step = (t_per_step + tps2)/2
+                except IndexError:
+                    t, deltat, exectime = get_solver_times(solver, window=2000)
+                    t_per_step = exectime[-1] - exectime[-2]
+                try:
+                    deltat = deltat[-1]
+                except IndexError:
+                    deltat = get_deltat()
+                percent_done = int(t[-1]/endtime*100)
+                time_left, solve_rate = endtime - t[-1], t_per_step/deltat/3600
+                slt = time_left*solve_rate
+                solve_time_left = str(datetime.timedelta(hours=slt))[:-7]
+                print("\r[{}%] - solving at {:0.2f} h/s - {} remaining".format\
+                        (percent_done, solve_rate, solve_time_left), end="")
+                time.sleep(1)
+            print("\nEnd")
+        except KeyboardInterrupt:
+            print("")
 
 def read_log_end(logname, nlines=20):
     """Read last lines from log and return as a list."""

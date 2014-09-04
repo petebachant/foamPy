@@ -6,6 +6,11 @@ I have written and want to have available for the sake of reproducibility.
 
 ## Installation
 
-In this directory, run
+### With `pip`
+
+    pip install foampy
+
+### From source
+Clone this repository, and in this directory run
 
     python setup.py install

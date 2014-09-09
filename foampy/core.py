@@ -590,8 +590,9 @@ def make_progress_bar(gui=True):
                 time_left, solve_rate = endtime - t[-1], t_per_step/deltat/3600
                 slt = time_left*solve_rate
                 solve_time_left = str(datetime.timedelta(hours=slt))[:-7]
-                print("\r[{}%] - solving at {:0.2f} h/s - {} remaining   ".format\
-                        (percent_done, solve_rate, solve_time_left), end="")
+                print("\r" + " "*66, end="")
+                print("\r[{}%] - solving at {:0.2f} h/s - {} remaining".format\
+                        (percent_done, solve_rate, solve_time_left), end="")    
                 time.sleep(1)
             print("\nEnd")
         except KeyboardInterrupt:

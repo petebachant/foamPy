@@ -14,3 +14,15 @@ I have written and want to have available for the sake of reproducibility.
 Clone this repository, and in this directory run
 
     python setup.py install
+
+## Usage
+
+### Assessing the progress of an OpenFOAM run
+
+In a case directory, run
+
+    foampy-progress
+
+For a PyQt GUI progress bar run
+
+    foampy-progress-gui

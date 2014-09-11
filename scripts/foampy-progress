@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+This script creates a progress indicator in a terminal.
+"""
+
+import foampy
+
+foampy.make_progress_bar(gui=False)

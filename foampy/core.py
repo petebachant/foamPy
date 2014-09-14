@@ -197,7 +197,7 @@ def load_all_torque_drag(casedir="", torque_axis="z", drag_axis="x"):
     return t, torque, drag
 
 
-def load_theta_omega(casedir="", t_interp=None, theta_units="degrees"):
+def load_theta_omega(casedir="", t_interp=[], theta_units="degrees"):
     """Imports omega from dynamicMeshDict table. Returns t, theta, 
     omega (rad/s) where theta is calculated using the trapezoidal rule.
     
@@ -222,7 +222,7 @@ def load_theta_omega(casedir="", t_interp=None, theta_units="degrees"):
     for n in range(len(t)):
         theta[n] = np.trapz(omega[:n], t[:n])
     # If provided, interpolate omega to match t vector
-    if t_interp:
+    if len(t_interp) > 0:
         omega = np.interp(t_interp, t, omega)
         theta = np.interp(t_interp, t, theta)
     if theta_units == "degrees":

@@ -222,7 +222,7 @@ def load_theta_omega(casedir="", t_interp=None, theta_units="degrees"):
     for n in range(len(t)):
         theta[n] = np.trapz(omega[:n], t[:n])
     # If provided, interpolate omega to match t vector
-    if t_interp != None:
+    if t_interp:
         omega = np.interp(t_interp, t, omega)
         theta = np.interp(t_interp, t, theta)
     if theta_units == "degrees":

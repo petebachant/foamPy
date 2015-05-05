@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+"""
+This script converts an airfoil dataset into OpenFOAM format for use with
+turbinesFoam.
+"""
+
+from __future__ import division, print_function, unicode_literals
+import os
+import sys
+from foampy.foil import reformat_foildata
+
+if __name__ == "__main__":
+    ifile = sys.argv[1]
+    ofile = sys.argv[2]
+    try:
+        startline = sys.argv[3]
+    except IndexError:
+        startline = None
+    try:
+        endline = sys.argv[4]
+    except:
+        endline = None
+    reformat_foildata(ifile, ofile, startline, endline)

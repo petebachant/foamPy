@@ -18,6 +18,6 @@ if __name__ == "__main__":
         startline = None
     try:
         endline = sys.argv[4]
-    except:
+    except IndexError:
         endline = None
     reformat_foildata(ifile, ofile, startline, endline)

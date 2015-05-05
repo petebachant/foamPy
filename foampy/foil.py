@@ -75,6 +75,3 @@ def test_reformat_foildata():
     if os.path.isfile(ofp3):
         os.remove(ofp3)
     reformat_foildata(ifp, ofp3, startline=118, endline=119)
-    
-    
-    

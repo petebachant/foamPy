@@ -1,19 +1,23 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from distutils.core import setup
-import os
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+from foampy import __version__
 
 setup(
     name="foamPy",
-    version="0.0.1",
+    version=__version__,
     author="Pete Bachant",
     author_email="petebachant@gmail.com",
     packages=["foampy"],
     scripts=["scripts/foampy-progress-gui",
              "scripts/foampy-progress",
              "scripts/foampy-load-surfaces",
-             "scripts/pvloadsurf.py"],
+             "scripts/pvloadsurf.py",
+             "scripts/foampy-reformat-foildata"],
     url="https://github.com/petebachant/foamPy.git",
     license="MIT",
     description="Python package for working with OpenFOAM.",

@@ -13,11 +13,11 @@ if __name__ == "__main__":
     ifile = sys.argv[1]
     ofile = sys.argv[2]
     try:
-        startline = sys.argv[3]
+        startline = int(sys.argv[3])
     except IndexError:
         startline = None
     try:
-        endline = sys.argv[4]
+        endline = int(sys.argv[4])
     except IndexError:
         endline = None
     reformat_foildata(ifile, ofile, startline, endline)

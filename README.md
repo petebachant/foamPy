@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/petebachant/foampy.png?label=ready&title=Ready)](https://waffle.io/petebachant/foampy)
 # foamPy
 
 A work-in-progress Python package for working with OpenFOAM--not to be confused

@@ -31,7 +31,7 @@ class FoamDict(dict):
         return "test"
     
     
-def BlockMeshDict(FoamDict):
+class BlockMeshDict(FoamDict):
     """Object to represent a `blockMeshDict`."""
     
     def __init__(self, name="blockMeshDict", casedir="./", 
@@ -39,7 +39,35 @@ def BlockMeshDict(FoamDict):
         FoamDict.__init__(self)
 
 
+class FoamList(list):
+    """Class that represents an OpenFOAM list."""
+    
+    def __init__(self, py_list=[], dtype=float):
+        py_list = [dtype(i) for i in py_list]
+        list.__init__(self, py_list)
+    
+    def __str__(self):
+        txt = "("
+        for i in self:
+            txt += str(i) + " "
+        txt = txt[:-1]
+        txt += ")"
+        return txt
+
+
 def test_foamdict():
     """Test `FoamDict` class."""
     d = FoamDict(name="controlDict", casedir="test")
     print(d)
+    
+
+def test_foamlist():
+    """Test `FoamList` class."""
+    flist = FoamList([1, 2, 3, 4])
+    print(flist)
+    
+    for i in flist:
+        print(i)
+        
+    flist2 = FoamList([flist, flist], dtype=FoamList)
+    print(flist2)

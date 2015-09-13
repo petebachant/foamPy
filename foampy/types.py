@@ -8,6 +8,7 @@ from __future__ import division, print_function
 import os
 import foampy
 
+
 class FoamDict(dict):
     """Object that represents an OpenFOAM dictionary."""
     
@@ -16,19 +17,36 @@ class FoamDict(dict):
         self.subdir = subdir
         self.casedir = casedir
         self.fpath = os.path.join(casedir, subdir, name)
+        self.foam_version = foampy.foam_version
+        self.header = ""
         if os.path.isfile(self.fpath):
             self.read()
         else:
             self.header = foampy.dictionaries.build_header(name,
-                    foampy.foam_version, fileclass="dictionary")
+                    self.foam_version, fileclass="dictionary")
             
     def read(self):
         """Parse dictionary."""
-        pass
+        # Read header first
+        with open(self.fpath) as f:
+            in_header = False
+            for line in f:
+                if line[:2] == "/*":
+                    in_header = True
+                elif line[:2] == r"\*":
+                    self.header += line
+                    in_header = False
+                if in_header:
+                    self.header += line           
+        # Parse header for OpenFOAM version
+        splitheader = self.header.split()
+        if "Version:" in splitheader:
+            index = splitheader.index("Version:") + 1
+            self.foam_version = splitheader[index]
     
     def __str__(self):
         """Create text from dictionary in OpenFOAM format."""
-        return "test"
+        return self.header
     
     
 class BlockMeshDict(FoamDict):
@@ -59,6 +77,7 @@ def test_foamdict():
     """Test `FoamDict` class."""
     d = FoamDict(name="controlDict", casedir="test")
     print(d)
+    print(d.foam_version)
     
 
 def test_foamlist():

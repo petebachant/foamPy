@@ -4,8 +4,7 @@ import os
 
 # Attempt to detect OpenFOAM version
 try:
-    wm_project_dir = os.environ["WM_PROJECT_DIR"]
-    foam_version = os.path.split(wm_project_dir)[-1].replace("OpenFOAM-", "")
+    foam_version = os.environ["WM_PROJECT_VERSION"]
 except KeyError:
     foam_version = "x.x.x"
 

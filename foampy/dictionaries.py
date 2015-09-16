@@ -9,7 +9,8 @@ OpenFOAM. I'm not sure how it compares with PyFoam.
 from __future__ import division, print_function
 
 
-system_dicts = ["controlDict", "snappyHexMeshDict", "fvSchemes", "fvSolution"]
+system_dicts = ["controlDict", "snappyHexMeshDict", "fvSchemes", "fvSolution",
+                "fvOptions", "decomposeParDict", "topoSetDict"]
 constant_dicts = ["dynamicMeshDict", "RASProperties", "transportProperties",
                   "turbulenceProperties"]
 

@@ -23,7 +23,7 @@ setup(
     license="MIT",
     description="Python package for working with OpenFOAM.",
     long_description=open("README.md").read(),
-    install_requires=["numpy"],
+    install_requires=[],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Science/Research",

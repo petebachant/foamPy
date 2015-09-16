@@ -11,7 +11,7 @@ import foampy
 
 class FoamDict(dict):
     """Object that represents an OpenFOAM dictionary."""
-    
+
     def __init__(self, name="", casedir="./", subdir="system"):
         self.name = name
         self.subdir = subdir
@@ -24,7 +24,7 @@ class FoamDict(dict):
         else:
             self.header = foampy.dictionaries.build_header(name,
                     self.foam_version, fileclass="dictionary")
-            
+
     def read(self):
         """Parse dictionary."""
         # Read header first
@@ -37,33 +37,33 @@ class FoamDict(dict):
                     self.header += line
                     in_header = False
                 if in_header:
-                    self.header += line           
+                    self.header += line
         # Parse header for OpenFOAM version
         splitheader = self.header.split()
         if "Version:" in splitheader:
             index = splitheader.index("Version:") + 1
             self.foam_version = splitheader[index]
-    
+
     def __str__(self):
         """Create text from dictionary in OpenFOAM format."""
         return self.header
-    
-    
+
+
 class BlockMeshDict(FoamDict):
     """Object to represent a `blockMeshDict`."""
-    
-    def __init__(self, name="blockMeshDict", casedir="./", 
+
+    def __init__(self, name="blockMeshDict", casedir="./",
                  subdir="constant/polyMesh"):
         FoamDict.__init__(self)
 
 
 class FoamList(list):
     """Class that represents an OpenFOAM list."""
-    
+
     def __init__(self, py_list=[], dtype=float):
         py_list = [dtype(i) for i in py_list]
         list.__init__(self, py_list)
-    
+
     def __str__(self):
         txt = "("
         for i in self:
@@ -78,15 +78,15 @@ def test_foamdict():
     d = FoamDict(name="controlDict", casedir="test")
     print(d)
     print(d.foam_version)
-    
+
 
 def test_foamlist():
     """Test `FoamList` class."""
     flist = FoamList([1, 2, 3, 4])
     print(flist)
-    
+
     for i in flist:
         print(i)
-        
+
     flist2 = FoamList([flist, flist], dtype=FoamList)
     print(flist2)

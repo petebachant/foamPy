@@ -61,7 +61,7 @@ def load_torque_drag_old(casedir="", folder="0", filename=None):
     torque = np.asarray(np.asarray(mpz) + np.asarray(mvz))
     drag = np.asarray(np.asarray(fpx) + np.asarray(fvx))
     return t, torque, drag
-    
+
 def load_forces_moments(casedir="", folder="0", filename=None):
     """Loads time, forces, and moments into a dictionary of Numpy arrays."""
     # Create empty lists
@@ -120,10 +120,10 @@ def load_forces_moments(casedir="", folder="0", filename=None):
                                     "z" : np.asarray(mvz)},
                         "porous" : {"x" : np.asarray(mpox),
                                     "y" : np.asarray(mpoy),
-                                    "z" : np.asarray(mpoz)}}}        
+                                    "z" : np.asarray(mpoz)}}}
     return data
 
-def load_torque_drag(casedir="", folder="0", filename=None, 
+def load_torque_drag(casedir="", folder="0", filename=None,
                      torque_axis="z", drag_axis="x"):
     """Loads time, z-axis torque, and streamwise force from specified forces
     folder. Case name can be left empty if running within a case folder."""
@@ -182,7 +182,7 @@ def load_all_torque_drag(casedir="", torque_axis="z", drag_axis="x"):
     for folder in folders:
         files = sorted(os.listdir(casedir+"postProcessing/forces/"+folder))
         for f in files:
-            t1, torque1, drag1 = load_torque_drag(casedir=casedir, 
+            t1, torque1, drag1 = load_torque_drag(casedir=casedir,
                                                   folder=folder,
                                                   filename=f,
                                                   torque_axis=torque_axis,
@@ -194,9 +194,9 @@ def load_all_torque_drag(casedir="", torque_axis="z", drag_axis="x"):
 
 
 def load_theta_omega(casedir="", t_interp=[], theta_units="degrees"):
-    """Imports omega from dynamicMeshDict table. Returns t, theta, 
+    """Imports omega from dynamicMeshDict table. Returns t, theta,
     omega (rad/s) where theta is calculated using the trapezoidal rule.
-    
+
     `t_interp` is a keyword argument for an array over which omega and theta
     will be interpolated.
     """
@@ -224,7 +224,7 @@ def load_theta_omega(casedir="", t_interp=[], theta_units="degrees"):
     if theta_units == "degrees":
         theta = theta/np.pi*180
     return t, theta, omega
-    
+
 def load_set(casedir="", name="profile", quantity="U", fmt="xy", axis="xyz"):
     """Imports text data created with the OpenFOAM sample utility"""
     if casedir != "":
@@ -234,9 +234,9 @@ def load_set(casedir="", name="profile", quantity="U", fmt="xy", axis="xyz"):
     t = []
     times = os.listdir(folder)
     for time1 in times:
-        try: 
+        try:
             float(time1)
-        except ValueError: 
+        except ValueError:
             times.remove(time1)
         try:
             t.append(int(time1))
@@ -260,7 +260,7 @@ def load_set(casedir="", name="profile", quantity="U", fmt="xy", axis="xyz"):
                     data[ts]["y"] = d[:,1]
                     data[ts]["z"] = d[:,2]
     return data
-    
+
 def load_sample_xy(casedir="", profile="U"):
     """Imports text data created with the OpenFOAM sample utility"""
     if casedir != "":
@@ -270,9 +270,9 @@ def load_sample_xy(casedir="", profile="U"):
     t = []
     times = os.listdir(folder)
     for time1 in times:
-        try: 
+        try:
             float(time1)
-        except ValueError: 
+        except ValueError:
             times.remove(time1)
         try:
             t.append(int(time1))
@@ -312,7 +312,7 @@ def load_sample_xy(casedir="", profile="U"):
         data = {"t" : t, "uu" : uu, "vv": vv, "ww" : ww,
                 "uv" : uv, "y" : y}
     return data
-    
+
 def get_endtime():
     """Get run endTime"""
     with open("system/controlDict", "r") as f:
@@ -321,7 +321,7 @@ def get_endtime():
             if "endTime" in line and line[0] == "endTime":
                 endtime = float(line[1])
     return endtime
-    
+
 def get_deltat():
     """Get run deltaT"""
     with open("system/controlDict", "r") as f:
@@ -330,7 +330,7 @@ def get_deltat():
             if "deltaT" in line and line[0] == "deltaT":
                 deltat = float(line[1])
     return deltat
-    
+
 def get_ncells(logname="log.checkMesh", keyword="cells"):
     if keyword == "cells":
         keyword = "cells:"
@@ -340,7 +340,7 @@ def get_ncells(logname="log.checkMesh", keyword="cells"):
             if ls and ls[0] == keyword:
                 value = ls[1]
                 return int(value)
-                
+
 def get_max_courant_no():
     with open("system/controlDict") as f:
         for line in f.readlines():
@@ -348,7 +348,7 @@ def get_max_courant_no():
                 ls = line.replace(";", " ").split()
                 if ls[0] == "maxCo":
                     return float(ls[1])
-    
+
 def read_dict(dictname, casedir=""):
     """Read an OpenFOAM dict into a Python dict. Right now this is quite
     crude, but gets the job done decently for 1 word parameters."""
@@ -371,8 +371,8 @@ def read_dict(dictname, casedir=""):
 def read_case():
     """Will eventually read all case dicts and put in a hierarchy of dicts."""
     pass
-    
-def gen_dynmeshdict(U, R, meantsr, cellzone="AMIsurface", rpm_fluc=3.7, 
+
+def gen_dynmeshdict(U, R, meantsr, cellzone="AMIsurface", rpm_fluc=3.7,
                     npoints=400, axis="(0 0 1)", direction=1):
     """Generates a dynamicMeshDict for a given U, R, meantsr, and an optional
     rpm fluctuation amplitude. Phase is fixed."""
@@ -415,7 +415,7 @@ solidBodyMotionFvMeshCoeffs
     if npoints > 0:
         top += """        omega\t\ttable
         (
-"""    
+"""
         """Table should be in form
         		(t0 omega0)
         		(t1 omega1)
@@ -470,7 +470,7 @@ def get_solver_times(solver="pimpleDyMFoam", window=400):
     exectime = []
     deltat = []
     for entry in log:
-        try: 
+        try:
             line = entry.split()
             if line[0] == b"Time":
                 t.append(float(line[-1]))
@@ -480,10 +480,10 @@ def get_solver_times(solver="pimpleDyMFoam", window=400):
                 exectime.append(float(line[2]))
             if b"deltaT" in line:
                 deltat.append(float(line[-1]))
-        except: 
+        except:
             pass
     return t, deltat, exectime
-    
+
 
 class ProgressThread(QtCore.QThread):
     finished = QtCore.pyqtSignal(bool)
@@ -516,7 +516,7 @@ class ProgressThread(QtCore.QThread):
             self.part_done.emit(int(t[-1]/endtime*100))
             self.timeleft_solverate.emit([(endtime - t[-1]), t_per_step/deltat/3600])
             time.sleep(1)
-        self.finished.emit(True)   
+        self.finished.emit(True)
 
 
 class ProgressBar(QtGui.QWidget):
@@ -524,13 +524,13 @@ class ProgressBar(QtGui.QWidget):
     def __init__(self, parent=None):
         super(ProgressBar, self).__init__(parent)
         self.thread = ProgressThread()
-        self.nameLine = QtGui.QLineEdit()    
+        self.nameLine = QtGui.QLineEdit()
         self.progressbar = QtGui.QProgressBar()
         self.progressbar.setMinimum(1)
         self.progressbar.setMaximum(100)
-        self.progressbar.setFixedWidth(400)    
+        self.progressbar.setFixedWidth(400)
         mainLayout = QtGui.QGridLayout()
-        mainLayout.addWidget(self.progressbar, 0, 0)    
+        mainLayout.addWidget(self.progressbar, 0, 0)
         self.setLayout(mainLayout)
         self.setWindowTitle("Solving")
         self.thread.part_done.connect(self.update_progress)
@@ -544,10 +544,10 @@ class ProgressBar(QtGui.QWidget):
         solve_time_left = str(datetime.timedelta(hours=slt))[:-7]
         self.setWindowTitle("Solving at " + str(solve_rate) + " h/s - " \
                 + solve_time_left + " remaining")
-                
+
     def update_progress(self, val):
         self.progressbar.setValue(val)
-        
+
     def on_finished(self):
         sys.exit()
 
@@ -588,7 +588,7 @@ def make_progress_bar(gui=True):
                 solve_time_left = str(datetime.timedelta(hours=slt))[:-7]
                 print("\r" + " "*66, end="")
                 print("\r[{}%] - solving at {:0.2f} h/s - {} remaining".format\
-                        (percent_done, solve_rate, solve_time_left), end="")    
+                        (percent_done, solve_rate, solve_time_left), end="")
                 time.sleep(1)
             print("\nEnd")
         except KeyboardInterrupt:
@@ -626,12 +626,18 @@ def read_log_end(logname, nlines=20):
     log = data.splitlines()[-window:]
     return [line.decode("utf-8") for line in log]
 
-def main():
-    """Testing things."""
-    gen_dynmeshdict(1, 1, 1, npoints=10)
-    t, theta, omega = load_theta_omega()
-    print(t)
-    print(omega)
 
-if __name__ == "__main__":
-    main()
+def test_gen_dynmeshdict():
+    """Test `gen_dynmeshdict`."""
+    os.chdir("test")
+    u = 1
+    r = 1
+    meantsr = 1
+    gen_dynmeshdict(u, r, meantsr, npoints=10, rpm_fluc=0)
+    t, theta, omega = load_theta_omega()
+    assert t.min() == 0
+    assert t.max() == 0.5
+    assert len(omega) == 10
+    assert np.mean(omega*r/u) == meantsr
+    os.chdir("../")
+    os.system("git checkout test/constant/dynamicMeshDict")

@@ -13,9 +13,9 @@ system_dicts = ["controlDict", "snappyHexMeshDict", "fvSchemes", "fvSolution"]
 constant_dicts = ["dynamicMeshDict", "RASProperties", "transportProperties",
                   "turbulenceProperties"]
 
-    
+
 def build_header(dictobject, version="2.3.x", fileclass="dictionary"):
-    """Creates the header for an OpenFOAM dictionary. Inputs are the 
+    """Creates the header for an OpenFOAM dictionary. Inputs are the
     object and version."""
     return \
     r"""/*--------------------------------*- C++ -*----------------------------------*\
@@ -36,6 +36,8 @@ FoamFile
 
 
 def replace_value(dictpath, keyword, newvalue):
+    """Replace a value in a dictionary."""
+    newvalue = str(newvalue)
     with open(dictpath) as f:
         in_block = False
         lines = f.readlines()
@@ -59,7 +61,8 @@ def replace_value(dictpath, keyword, newvalue):
     with open(dictpath, "w") as f:
         for line in new_text:
             f.write(line)
-            
+
+
 def read_text(dictpath, keyword):
     with open(dictpath) as f:
         in_block = False
@@ -76,8 +79,12 @@ def read_text(dictpath, keyword):
                 in_block = False
                 nend = n
     return lines[nstart:nend+1]
-    
-def read_single_line_value(dictname, objname, valtype=float, casedir=""):
+
+
+def read_single_line_value(dictname, objname, dtype=float, casedir=""):
+    """Read value from a dictionary that appears on a single line."""
+    # Backwards compatibility
+    valtype = dtype
     if casedir:
         p = casedir + "/"
     else:
@@ -96,8 +103,15 @@ def read_single_line_value(dictname, objname, valtype=float, casedir=""):
                     return valtype(ls[1])
 
 
-if __name__ == "__main__":
-    print(read_single_line_value("blockMeshDict", "convertToMeters",
-                                 casedir="../test"))
-    
-
+def test_replace_value():
+    """Test the `replace_value` function."""
+    orig = read_single_line_value("blockMeshDict", "convertToMeters",
+                                  casedir="./test", dtype=int)
+    replace_value("test/constant/polyMesh/blockMeshDict", "convertToMeters",
+                  555)
+    assert read_single_line_value("blockMeshDict", "convertToMeters",
+                                  casedir="./test") == 555
+    replace_value("test/constant/polyMesh/blockMeshDict", "convertToMeters",
+                  orig)
+    assert read_single_line_value("blockMeshDict", "convertToMeters",
+                                  casedir="./test") == orig

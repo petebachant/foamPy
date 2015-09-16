@@ -60,8 +60,15 @@ class BlockMeshDict(FoamDict):
 class FoamList(list):
     """Class that represents an OpenFOAM list."""
 
-    def __init__(self, py_list=[], dtype=float):
-        py_list = [dtype(i) for i in py_list]
+    def __init__(self, list_in=None, dtype=float):
+        if isinstance(list_in, list):
+            py_list = [dtype(i) for i in list_in]
+        elif isinstance(list_in, str):
+            # Attempt to parse string into list
+            list_in = list_in.replace("(", "").replace(")", "").split()
+            py_list = [dtype(i) for i in list_in]
+        else:
+            py_list=[]
         list.__init__(self, py_list)
 
     def __str__(self):
@@ -90,3 +97,6 @@ def test_foamlist():
 
     flist2 = FoamList([flist, flist], dtype=FoamList)
     print(flist2)
+
+    flist = FoamList("(0 0 0 0)", dtype=int)
+    assert flist[:] == [0]*4

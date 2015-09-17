@@ -56,14 +56,17 @@ class FoamDict(OrderedDict):
         """Create text from dictionary in OpenFOAM format."""
         txt = self.header + "\n" + str(self.foamfile) + "\n"
         txt += foampy.dictionaries.upper_rule + "\n\n"
-        for key, value in self.items():
-            if isinstance(value, FoamSubDict):
-                value.name = key
-                txt += str(value) + "\n\n"
+        for key, val in self.items():
+            strval = str(val)
+            if isinstance(val, bool):
+                strval = strval.lower()
+            if isinstance(val, FoamSubDict):
+                val.name = key
+                txt += str(val) + "\n\n"
             elif len(key) < 16:
-                txt += "{:16s}{};\n\n".format(key, value)
+                txt += "{:16s}{};\n\n".format(key, strval)
             else:
-                txt += "{} {};\n\n".format(key, value)
+                txt += "{} {};\n\n".format(key, strval)
         txt += foampy.dictionaries.lower_rule + "\n"
         return txt
 
@@ -78,11 +81,19 @@ class FoamSubDict(OrderedDict):
     def __str__(self):
         txt = self.name + "\n{\n"
         for key, val in self.items():
+            strval = str(val)
+            if isinstance(val, bool):
+                strval = strval.lower()
             if not isinstance(val, FoamSubDict):
                 if len(key) < 12:
-                    txt += "    {:12s}{};\n".format(key, val)
+                    txt += "    {:12s}{};\n".format(key, strval)
                 else:
-                    txt += "    {} {};\n".format(key, val)
+                    txt += "    {} {};\n".format(key, strval)
+            else:
+                val.name = key
+                txt += "\n"
+                for line in str(val).split("\n"):
+                    txt += "    " + line + "\n"
         txt += "}"
         return txt
 
@@ -124,7 +135,12 @@ def test_foamdict():
     d = FoamDict(name="controlDict", casedir="test")
     d["someInt"] = 555
     d["someFloat"] = 5.5
+    d["someString"] = "aString"
+    d["someBool"] = False
+    d["quotedString"] = '"quote"'
     d["subDict"] = FoamSubDict(otherInt=5, otherFloat=5.555)
+    d["subDict"]["addedLater"] = 666
+    d["subDict"]["subSubDict"] = FoamSubDict(subSubBool=True)
     print(d)
 
 

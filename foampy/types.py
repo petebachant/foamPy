@@ -8,6 +8,7 @@ from __future__ import division, print_function
 import os
 import foampy
 from collections import OrderedDict
+import numpy as np
 
 
 class FoamDict(OrderedDict):
@@ -110,7 +111,7 @@ class FoamList(list):
     """Class that represents an OpenFOAM list."""
 
     def __init__(self, list_in=None, dtype=float):
-        if isinstance(list_in, list):
+        if isinstance(list_in, list) or isinstance(list_in, np.ndarray):
             py_list = [dtype(i) for i in list_in]
         elif isinstance(list_in, str):
             # Attempt to parse string into list
@@ -137,7 +138,7 @@ def test_foamdict():
     d["someFloat"] = 5.5
     d["someString"] = "aString"
     d["someBool"] = False
-    d["quotedString"] = '"quote"'
+    d["someList"] = FoamList(np.arange(5))
     d["subDict"] = FoamSubDict(otherInt=5, otherFloat=5.555)
     d["subDict"]["addedLater"] = 666
     d["subDict"]["subSubDict"] = FoamSubDict(subSubBool=True)

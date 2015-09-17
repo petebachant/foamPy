@@ -10,11 +10,11 @@ import foampy
 from collections import OrderedDict
 
 
-class FoamDict(dict):
+class FoamDict(OrderedDict):
     """Object that represents an OpenFOAM dictionary."""
 
-    def __init__(self, name="", casedir="./", subdir="system"):
-        dict.__init__(self)
+    def __init__(self, name="", casedir="./", subdir="system", **kwargs):
+        OrderedDict.__init__(self, kwargs)
         self.name = name
         self.subdir = subdir
         self.casedir = casedir
@@ -27,14 +27,10 @@ class FoamDict(dict):
             self.header = foampy.dictionaries.build_header(name,
                     self.foam_version, fileclass="dictionary",
                     incl_foamfile=False)
-        self["header"] = self.header
-        self["FoamFile"] = FoamSubDict(name="FoamFile", version=2.0,
-                                       format="ascii")
-        self["FoamFile"]["class"] = "dictionary"
-        self["FoamFile"]["object"] = name
-        self["upper_rule"] = foampy.dictionaries.upper_rule
-        self["lower_rule"] = foampy.dictionaries.lower_rule
-        self.item_order = ["header", "FoamFile", "upper_rule"]
+        self.foamfile = FoamSubDict(name="FoamFile", version=2.0,
+                                    format="ascii")
+        self.foamfile["class"] = "dictionary"
+        self.foamfile["object"] = name
 
     def read(self):
         """Parse dictionary."""
@@ -55,11 +51,17 @@ class FoamDict(dict):
             index = splitheader.index("Version:") + 1
             self.foam_version = splitheader[index]
 
+
     def __str__(self):
         """Create text from dictionary in OpenFOAM format."""
-        txt = ""
-        for i in self.item_order:
-            txt += str(self[i]) + "\n"
+        txt = self.header + "\n" + str(self.foamfile) + "\n"
+        txt += foampy.dictionaries.upper_rule + "\n\n"
+        for key, value in self.items():
+            if len(key) < 16:
+                txt += "{:16s}{};\n\n".format(key, value)
+            else:
+                txt += "{} {}\n\n".format(key, value)
+        txt += foampy.dictionaries.lower_rule + "\n"
         return txt
 
 
@@ -117,6 +119,7 @@ def test_foamdict():
     """Test `FoamDict` class."""
     print("\nTesting FoamDict")
     d = FoamDict(name="controlDict", casedir="test")
+    d["new_item"] = 555
     print(d)
 
 

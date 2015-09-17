@@ -57,10 +57,13 @@ class FoamDict(OrderedDict):
         txt = self.header + "\n" + str(self.foamfile) + "\n"
         txt += foampy.dictionaries.upper_rule + "\n\n"
         for key, value in self.items():
-            if len(key) < 16:
+            if isinstance(value, FoamSubDict):
+                value.name = key
+                txt += str(value) + "\n\n"
+            elif len(key) < 16:
                 txt += "{:16s}{};\n\n".format(key, value)
             else:
-                txt += "{} {}\n\n".format(key, value)
+                txt += "{} {};\n\n".format(key, value)
         txt += foampy.dictionaries.lower_rule + "\n"
         return txt
 
@@ -119,7 +122,9 @@ def test_foamdict():
     """Test `FoamDict` class."""
     print("\nTesting FoamDict")
     d = FoamDict(name="controlDict", casedir="test")
-    d["new_item"] = 555
+    d["someInt"] = 555
+    d["someFloat"] = 5.5
+    d["subDict"] = FoamSubDict(otherInt=5, otherFloat=5.555)
     print(d)
 
 

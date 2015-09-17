@@ -15,25 +15,29 @@ constant_dicts = ["dynamicMeshDict", "RASProperties", "transportProperties",
                   "turbulenceProperties"]
 
 
-def build_header(dictobject, version="2.3.x", fileclass="dictionary"):
+def build_header(dictobject="", version="2.3.x", fileclass="dictionary",
+                 incl_foamfile=True):
     """Creates the header for an OpenFOAM dictionary. Inputs are the
     object and version."""
-    return \
+    txt = \
     r"""/*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
 |  \\    /   O peration     | Version:  {}                                 |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
-\*---------------------------------------------------------------------------*/
+\*---------------------------------------------------------------------------*/""".format(version)
+    if incl_foamfile:
+        txt += \
+        r"""
 FoamFile
 {{
     version     2.0;
     format      ascii;
     class       {};
     object      {};
-}}
-""".format(version, fileclass, dictobject)
+}}""".format(fileclass, dictobject)
+    return txt
 
 
 def replace_value(dictpath, keyword, newvalue):
@@ -116,3 +120,32 @@ def test_replace_value():
                   orig)
     assert read_single_line_value("blockMeshDict", "convertToMeters",
                                   casedir="./test") == orig
+
+
+def test_build_header():
+    """Test the `dictionaries.build_header` function."""
+    h = build_header("blockMeshDict", incl_foamfile=True)
+    print(h)
+    assert h == r"""/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}"""
+    h = build_header("blockMeshDict", incl_foamfile=False)
+    print(h)
+    assert h == r"""/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/"""

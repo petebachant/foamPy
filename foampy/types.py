@@ -7,12 +7,14 @@ and dictionaries.
 from __future__ import division, print_function
 import os
 import foampy
+from collections import OrderedDict
 
 
 class FoamDict(dict):
     """Object that represents an OpenFOAM dictionary."""
 
     def __init__(self, name="", casedir="./", subdir="system"):
+        dict.__init__(self)
         self.name = name
         self.subdir = subdir
         self.casedir = casedir
@@ -23,7 +25,16 @@ class FoamDict(dict):
             self.read()
         else:
             self.header = foampy.dictionaries.build_header(name,
-                    self.foam_version, fileclass="dictionary")
+                    self.foam_version, fileclass="dictionary",
+                    incl_foamfile=False)
+        self["header"] = self.header
+        self["FoamFile"] = FoamSubDict(name="FoamFile", version=2.0,
+                                       format="ascii")
+        self["FoamFile"]["class"] = "dictionary"
+        self["FoamFile"]["object"] = name
+        self["upper_rule"] = foampy.dictionaries.upper_rule
+        self["lower_rule"] = foampy.dictionaries.lower_rule
+        self.item_order = ["header", "FoamFile", "upper_rule"]
 
     def read(self):
         """Parse dictionary."""
@@ -34,7 +45,7 @@ class FoamDict(dict):
                 if line[:2] == "/*":
                     in_header = True
                 elif line[:2] == r"\*":
-                    self.header += line
+                    self.header += line.strip()
                     in_header = False
                 if in_header:
                     self.header += line
@@ -46,7 +57,29 @@ class FoamDict(dict):
 
     def __str__(self):
         """Create text from dictionary in OpenFOAM format."""
-        return self.header
+        txt = ""
+        for i in self.item_order:
+            txt += str(self[i]) + "\n"
+        return txt
+
+
+class FoamSubDict(OrderedDict):
+    """Object to represent a dictionary inside a dictionary."""
+
+    def __init__(self, name="", **kwargs):
+        self.name = name
+        OrderedDict.__init__(self, kwargs)
+
+    def __str__(self):
+        txt = self.name + "\n{\n"
+        for key, val in self.items():
+            if not isinstance(val, FoamSubDict):
+                if len(key) < 12:
+                    txt += "    {:12s}{};\n".format(key, val)
+                else:
+                    txt += "    {} {};\n".format(key, val)
+        txt += "}"
+        return txt
 
 
 class BlockMeshDict(FoamDict):
@@ -82,13 +115,23 @@ class FoamList(list):
 
 def test_foamdict():
     """Test `FoamDict` class."""
+    print("\nTesting FoamDict")
     d = FoamDict(name="controlDict", casedir="test")
     print(d)
-    print(d.foam_version)
+
+
+def test_foamsubdict():
+    """Test `FoamSubDict` class."""
+    print("\nTesting FoamSubDict")
+    d = FoamSubDict(name="FoamFile", version="2.0", format="ascii")
+    d["class"] = "dictionary"
+    d["object"] = "blockMeshDict"
+    print(d)
 
 
 def test_foamlist():
     """Test `FoamList` class."""
+    print("\nTesting FoamList")
     flist = FoamList([1, 2, 3, 4])
     print(flist)
 

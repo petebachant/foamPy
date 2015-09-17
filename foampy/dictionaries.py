@@ -14,6 +14,11 @@ system_dicts = ["controlDict", "snappyHexMeshDict", "fvSchemes", "fvSolution",
 constant_dicts = ["dynamicMeshDict", "RASProperties", "transportProperties",
                   "turbulenceProperties"]
 
+upper_rule = ("// * * * * * * * * * * * * * * * * * * * * * * * * * "
+             "* * * * * * * * * * * * //")
+lower_rule = ("// **********************************************"
+             "*************************** //")
+
 
 def build_header(dictobject="", version="2.3.x", fileclass="dictionary",
                  incl_foamfile=True):
@@ -110,6 +115,7 @@ def read_single_line_value(dictname, objname, dtype=float, casedir=""):
 
 def test_replace_value():
     """Test the `replace_value` function."""
+    print("\nTesting dictionaries.replace_value")
     orig = read_single_line_value("blockMeshDict", "convertToMeters",
                                   casedir="./test", dtype=int)
     replace_value("test/constant/polyMesh/blockMeshDict", "convertToMeters",
@@ -124,6 +130,7 @@ def test_replace_value():
 
 def test_build_header():
     """Test the `dictionaries.build_header` function."""
+    print("\nTesting dictionaries.build_header")
     h = build_header("blockMeshDict", incl_foamfile=True)
     print(h)
     assert h == r"""/*--------------------------------*- C++ -*----------------------------------*\

@@ -70,6 +70,11 @@ class FoamDict(OrderedDict):
                 txt += "{} {};\n\n".format(key, strval)
         txt += foampy.dictionaries.lower_rule + "\n"
         return txt
+        
+    def write(self):
+        """Write dictionary to file."""
+        with open(self.fpath, "w") as f:
+            f.write(str(self))
 
 
 class FoamSubDict(OrderedDict):

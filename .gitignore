@@ -6,3 +6,4 @@ MANIFEST
 *.ini
 *.txt
 foamPy.egg-info
+.cache

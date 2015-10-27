@@ -3,6 +3,8 @@ Module for working with foil data.
 """
 from __future__ import division, print_function
 import os
+import numpy as np
+
 
 class FoilData(object):
     """
@@ -13,50 +15,91 @@ class FoilData(object):
         self.cl = []
         self.cd = []
         self.cm = []
+        self.comments = ["// Reformatted with foamPy\n",
+                         "// (alpha_deg cl cd cm)\n"]
 
-    def read(self, fpath, startline=None, endline=None):
+    def read(self, fpath, startline=None, stopline=None, comments=False):
         """
         Reads foil data from file. Format is detected automatically, but
         column order is not.
         """
+        self.alpha = []
+        self.cl = []
+        self.cd = []
+        self.cm = []
+        if comments:
+            self.comments = []
         in_block = False
         with open(fpath, "r") as f:
             for n, line in enumerate(f.readlines()):
                 if startline is not None and n+1 < startline:
                     pass
-                elif endline is not None and n+1 > endline:
+                elif stopline is not None and n+1 > stopline:
                     pass
                 else:
                     try:
+                        line = line.replace("(", "")
+                        line = line.replace(")", "")
                         a = [float(n) for n in line.replace(",", " ").split()]
                         self.alpha.append(a[0])
                         self.cl.append(a[1])
                         self.cd.append(a[2])
                         if len(a) > 3:
                             self.cm.append(a[3])
+                        else:
+                            self.cm.append(0.0)
                         in_block = True
                     except (ValueError, IndexError):
                         if in_block:
                             break
+                        else:
+                            if comments:
+                                self.comments.append(line)
+        self.alpha = np.asarray(self.alpha)
+        self.cl = np.asarray(self.cl)
+        self.cd = np.asarray(self.cd)
+        self.cm = np.asarray(self.cm)
+        
+    def mirror(self):
+        """Mirror positive coefficients about zero degrees angle of attack."""
+        self.cl = self.cl[self.alpha >= 0]
+        self.cd = self.cd[self.alpha >= 0]
+        self.cm = self.cm[self.alpha >= 0]
+        self.alpha = self.alpha[self.alpha >= 0]
+        self.alpha = np.append(-self.alpha[-1:0:-1], self.alpha)
+        self.cl = np.append(-self.cl[-1:0:-1], self.cl)
+        self.cd = np.append(self.cd[-1:0:-1], self.cd)
+        self.cm = np.append(-self.cm[-1:0:-1], self.cm)
 
     def write(self, fpath):
         """
         Write foil data to file in OpenFOAM format.
         """
         with open(fpath, "w") as f:
-            f.write("// Reformatted with foamPy\n")
-            f.write("// (alpha_deg cl cd)\n" )
-            for a, cl, cd in zip(self.alpha, self.cl, self.cd):
-                f.write("({} {} {})\n".format(a, cl, cd))
+            for comment in self.comments:
+                if comment.strip()[:2] != "//":
+                    comment = "// " + comment
+                f.write(comment)
+            for a, cl, cd, cm in zip(self.alpha, self.cl, self.cd, self.cm):
+                f.write("({} {} {} {})\n".format(a, cl, cd, cm))
 
 
-def reformat_foildata(input_path, output_path, startline=None, endline=None):
+def reformat_foildata(input_path, output_path, startline=None, stopline=None):
     """
-    Reformats foil data file into a list of 3-element OpenFOAM lists.
+    Reformat foil data file into a list of 4-element OpenFOAM lists.
     """
     fd = FoilData()
-    fd.read(input_path, startline, endline)
+    fd.read(input_path, startline, stopline)
     fd.write(output_path)
+    
+    
+def mirror_foildata(inpath, outpath):
+    """Mirror positive data in file about zero angle of attack."""
+    fd = FoilData()
+    fd.read(inpath, comments=True)
+    fd.mirror()
+    fd.write(outpath)
+
 
 def test_reformat_foildata():
     """
@@ -74,4 +117,22 @@ def test_reformat_foildata():
     reformat_foildata(ifp, ofp2, startline=118)
     if os.path.isfile(ofp3):
         os.remove(ofp3)
-    reformat_foildata(ifp, ofp3, startline=118, endline=119)
+    reformat_foildata(ifp, ofp3, startline=118, stopline=119)
+    
+    
+def test_mirror_foildata():
+    """Test `FoilData.mirror`."""
+    fd = FoilData()
+    fd.cl = np.linspace(1, 20, 10)
+    fd.alpha = np.linspace(-5, 10, 10)
+    fd.cd = np.linspace(0.001, 0.01, 10)
+    fd.cm = np.linspace(0.5, 50, 10)
+    fd.mirror()
+    print(fd.alpha)
+    assert fd.alpha[0] == -10.0
+    assert fd.cl[0] == -fd.cl[-1]
+    assert fd.cd[0] == fd.cd[-1]
+    assert fd.cm[0] == -fd.cm[-1]
+    reformat_foildata("test/NACA_0021.dat", "test/NACA_0021_4.txt",
+                      startline=57)
+    mirror_foildata("test/NACA_0021_4.txt", "test/NACA_0021_4_m.txt")

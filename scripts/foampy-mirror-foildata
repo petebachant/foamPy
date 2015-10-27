@@ -4,57 +4,14 @@ This script mirrors foil data (in OpenFOAM list format) about zero angle of
 attack. Comments will all be written in the header.
 """
 from __future__ import division, print_function
-import sys
-import numpy as np
+import foampy.foil
+import argparse
 
-def mirror(infile, outfile):
-    alpha = []
-    cl = []
-    cd = []
-    comments = []
-
-    with open(infile) as f:
-        for line in f.readlines():
-            if line.strip()[:2] == "//":
-                comments.append(line)
-            else:
-                line = line.replace("(", "")
-                line = line.replace(")", "")
-                ls = line.split()
-                try:
-                    alpha.append(float(ls[0]))
-                    cl.append(float(ls[1]))
-                    cd.append(float(ls[2]))
-                except (IndexError, ValueError):
-                    pass
-
-    alpha = np.asarray(alpha)
-    cl = np.asarray(cl)
-    cd = np.asarray(cd)
-    ind = [alpha >= 0]
-
-    alpha = alpha[ind]
-    cl = cl[ind]
-    cd = cd[ind]
-
-    alpha_flipped = np.flipud(alpha)[:-1]
-    cl_flipped = np.flipud(cl)[:-1]
-    cd_flipped = np.flipud(cd)[:-1]
-
-    alpha = np.append(-alpha_flipped, alpha)
-    cl = np.append(-cl_flipped, cl)
-    cd = np.append(cd_flipped, cd)
-
-    with open(outfile, "w") as f:
-        for comment in comments:
-            f.write(comment)
-        for ai, cli, cdi in zip(alpha, cl, cd):
-            s = "({} {} {})\n".format(ai, cli, cdi)
-            f.write(s)
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        raise IOError("Wrong number of arguments")
-    infile = sys.argv[1]
-    outfile = sys.argv[2]
-    mirror(infile, outfile)
+    parser = argparse.ArgumentParser(description="Mirror foil data about "
+                                     "zero degrees angle of attack.")
+    parser.add_argument("infile", help="Input file path")
+    parser.add_argument("outfile", help="Output file path")
+    args = parser.parse_args()
+    foampy.foil.mirror_foildata(args.infile, args.outfile)

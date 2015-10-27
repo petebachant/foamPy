@@ -5,19 +5,19 @@ turbinesFoam.
 """
 
 from __future__ import division, print_function, unicode_literals
-import os
-import sys
 from foampy.foil import reformat_foildata
+import argparse
+
 
 if __name__ == "__main__":
-    ifile = sys.argv[1]
-    ofile = sys.argv[2]
-    try:
-        startline = int(sys.argv[3])
-    except IndexError:
-        startline = None
-    try:
-        endline = int(sys.argv[4])
-    except IndexError:
-        endline = None
-    reformat_foildata(ifile, ofile, startline, endline)
+    parser = argparse.ArgumentParser(description="Convert foil dataset from "
+                                     "a tabular or CSV format to an OpenFOAM "
+                                     "style list.")
+    parser.add_argument("infile", help="Input file name")
+    parser.add_argument("outfile", help="Output file name")
+    parser.add_argument("--startline", default=None, help="Line to start "
+                        "parsing")
+    parser.add_argument("--stopline", default=None, help="Line to stop "
+                        "parsing")
+    args = parser.parse_args()
+    reformat_foildata(args.infile, args.outfile, args.startline, args.stopline)

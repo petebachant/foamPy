@@ -119,8 +119,8 @@ def test_reformat_foildata():
         os.remove(ofp3)
     reformat_foildata(ifp, ofp3, startline=118, stopline=119)
     
-    
-def test_mirror_foildata():
+
+def test_foildata_mirror():
     """Test `FoilData.mirror`."""
     fd = FoilData()
     fd.cl = np.linspace(1, 20, 10)
@@ -133,6 +133,10 @@ def test_mirror_foildata():
     assert fd.cl[0] == -fd.cl[-1]
     assert fd.cd[0] == fd.cd[-1]
     assert fd.cm[0] == -fd.cm[-1]
+
+    
+def test_mirror_foildata():
+    """Test `mirror_foildata`."""
     reformat_foildata("test/NACA_0021.dat", "test/NACA_0021_4.txt",
                       startline=57)
     mirror_foildata("test/NACA_0021_4.txt", "test/NACA_0021_4_m.txt")

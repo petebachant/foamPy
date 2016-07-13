@@ -62,6 +62,7 @@ def load_torque_drag_old(casedir="", folder="0", filename=None):
     drag = np.asarray(np.asarray(fpx) + np.asarray(fvx))
     return t, torque, drag
 
+
 def load_forces_moments(casedir="", folder="0", filename=None):
     """Loads time, forces, and moments into a dictionary of Numpy arrays."""
     # Create empty lists
@@ -122,6 +123,7 @@ def load_forces_moments(casedir="", folder="0", filename=None):
                                     "y" : np.asarray(mpoy),
                                     "z" : np.asarray(mpoz)}}}
     return data
+
 
 def load_torque_drag(casedir="", folder="0", filename=None,
                      torque_axis="z", drag_axis="x"):
@@ -225,6 +227,7 @@ def load_theta_omega(casedir="", t_interp=[], theta_units="degrees"):
         theta = theta/np.pi*180
     return t, theta, omega
 
+
 def load_set(casedir="", name="profile", quantity="U", fmt="xy", axis="xyz"):
     """Imports text data created with the OpenFOAM sample utility"""
     if casedir != "":
@@ -260,6 +263,7 @@ def load_set(casedir="", name="profile", quantity="U", fmt="xy", axis="xyz"):
                     data[ts]["y"] = d[:,1]
                     data[ts]["z"] = d[:,2]
     return data
+
 
 def load_sample_xy(casedir="", profile="U"):
     """Imports text data created with the OpenFOAM sample utility"""
@@ -313,6 +317,7 @@ def load_sample_xy(casedir="", profile="U"):
                 "uv" : uv, "y" : y}
     return data
 
+
 def get_endtime():
     """Get run endTime"""
     with open("system/controlDict", "r") as f:
@@ -321,6 +326,7 @@ def get_endtime():
             if "endTime" in line and line[0] == "endTime":
                 endtime = float(line[1])
     return endtime
+
 
 def get_deltat():
     """Get run deltaT"""
@@ -341,6 +347,7 @@ def get_ncells(logname="log.checkMesh", keyword="cells"):
                 value = ls[1]
                 return int(value)
 
+
 def get_max_courant_no():
     with open("system/controlDict") as f:
         for line in f.readlines():
@@ -348,6 +355,7 @@ def get_max_courant_no():
                 ls = line.replace(";", " ").split()
                 if ls[0] == "maxCo":
                     return float(ls[1])
+
 
 def read_dict(dictname, casedir=""):
     """Read an OpenFOAM dict into a Python dict. Right now this is quite
@@ -368,9 +376,11 @@ def read_dict(dictname, casedir=""):
                     foamdict[line[0]] = line[1]
     return foamdict
 
+
 def read_case():
     """Will eventually read all case dicts and put in a hierarchy of dicts."""
     pass
+
 
 def gen_dynmeshdict(U, R, meantsr, cellzone="AMIsurface", rpm_fluc=3.7,
                     npoints=400, axis="(0 0 1)", direction=1):
@@ -434,6 +444,7 @@ solidBodyMotionFvMeshCoeffs
                 + ";\n    }\n}\n"
     with open("constant/dynamicMeshDict", "w") as f:
         f.write(alltxt)
+
 
 def get_solver_times(solver="pimpleDyMFoam", window=400):
     """Read last N lines from file solver log and return t (current Time),
@@ -514,7 +525,8 @@ class ProgressThread(QtCore.QThread):
             except IndexError:
                 deltat = get_deltat()
             self.part_done.emit(int(t[-1]/endtime*100))
-            self.timeleft_solverate.emit([(endtime - t[-1]), t_per_step/deltat/3600])
+            self.timeleft_solverate.emit([(endtime - t[-1]),
+                                         t_per_step/deltat/3600])
             time.sleep(1)
         self.finished.emit(True)
 
@@ -550,6 +562,7 @@ class ProgressBar(QtGui.QWidget):
 
     def on_finished(self):
         sys.exit()
+
 
 def make_progress_bar(gui=True):
     if gui:
@@ -593,6 +606,7 @@ def make_progress_bar(gui=True):
             print("\nEnd")
         except KeyboardInterrupt:
             print("")
+
 
 def read_log_end(logname, nlines=20):
     """Read last lines from log and return as a list."""

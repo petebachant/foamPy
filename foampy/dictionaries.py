@@ -1,21 +1,15 @@
 
-"""
-by Pete Bachant (c) 2014
+"""Functions for reading and writing dictionaries."""
 
-This module contains some useful classes and scripts for working with
-OpenFOAM. I'm not sure how it compares with PyFoam.
-
-"""
 from __future__ import division, print_function
-
 
 system_dicts = ["controlDict", "snappyHexMeshDict", "fvSchemes", "fvSolution"]
 constant_dicts = ["dynamicMeshDict", "RASProperties", "transportProperties",
                   "turbulenceProperties"]
 
-    
+
 def build_header(dictobject, version="2.3.x", fileclass="dictionary"):
-    """Creates the header for an OpenFOAM dictionary. Inputs are the 
+    """Creates the header for an OpenFOAM dictionary. Inputs are the
     object and version."""
     return \
     r"""/*--------------------------------*- C++ -*----------------------------------*\
@@ -59,7 +53,8 @@ def replace_value(dictpath, keyword, newvalue):
     with open(dictpath, "w") as f:
         for line in new_text:
             f.write(line)
-            
+
+
 def read_text(dictpath, keyword):
     with open(dictpath) as f:
         in_block = False
@@ -76,7 +71,8 @@ def read_text(dictpath, keyword):
                 in_block = False
                 nend = n
     return lines[nstart:nend+1]
-    
+
+
 def read_single_line_value(dictname, objname, valtype=float, casedir=""):
     if casedir:
         p = casedir + "/"
@@ -99,5 +95,3 @@ def read_single_line_value(dictname, objname, valtype=float, casedir=""):
 if __name__ == "__main__":
     print(read_single_line_value("blockMeshDict", "convertToMeters",
                                  casedir="../test"))
-    
-

@@ -1,11 +1,5 @@
+"""Functions for reading and writing dictionaries."""
 
-"""
-by Pete Bachant (c) 2014
-
-This module contains some useful classes and scripts for working with
-OpenFOAM. I'm not sure how it compares with PyFoam.
-
-"""
 from __future__ import division, print_function
 
 

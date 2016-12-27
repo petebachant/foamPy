@@ -1,9 +1,6 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-This script creates a PyQt progress bar for an OpenFOAM run.
-"""
+"""Create a PyQt progress bar for an OpenFOAM run."""
 
-import foampy
+import foampy.gui
 
-foampy.make_progress_bar()
+foampy.gui.make_progress_bar()

@@ -565,19 +565,3 @@ def read_log_end(logname, nlines=20):
                 block -= 1
     log = data.splitlines()[-window:]
     return [line.decode("utf-8") for line in log]
-
-
-def test_gen_dynmeshdict():
-    """Test `gen_dynmeshdict`."""
-    os.chdir("test")
-    u = 1
-    r = 1
-    meantsr = 1
-    gen_dynmeshdict(u, r, meantsr, npoints=10, rpm_fluc=0)
-    t, theta, omega = load_theta_omega()
-    assert t.min() == 0
-    assert t.max() == 0.5
-    assert len(omega) == 10
-    assert np.mean(omega*r/u) == meantsr
-    os.chdir("../")
-    os.system("git checkout test/constant/dynamicMeshDict")

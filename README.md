@@ -6,7 +6,6 @@ with PyFoam. Basically, this is a collection of useful functions and scripts
 I have written and want to have available for the sake of reproducibility.
 
 
-
 ## Installation
 
 ### With `pip`
@@ -38,4 +37,4 @@ For a PyQt GUI progress bar run
 
 To run tests, execute
 
-    nosetests -v --exe
+    py.test

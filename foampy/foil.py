@@ -59,7 +59,7 @@ class FoilData(object):
         self.cl = np.asarray(self.cl)
         self.cd = np.asarray(self.cd)
         self.cm = np.asarray(self.cm)
-        
+
     def mirror(self):
         """Mirror positive coefficients about zero degrees angle of attack."""
         self.cl = self.cl[self.alpha >= 0]
@@ -91,52 +91,11 @@ def reformat_foildata(input_path, output_path, startline=None, stopline=None):
     fd = FoilData()
     fd.read(input_path, startline, stopline)
     fd.write(output_path)
-    
-    
+
+
 def mirror_foildata(inpath, outpath):
     """Mirror positive data in file about zero angle of attack."""
     fd = FoilData()
     fd.read(inpath, comments=True)
     fd.mirror()
     fd.write(outpath)
-
-
-def test_reformat_foildata():
-    """
-    Tests the `foampy.foil.reformat_foildata` function.
-    """
-    ifp = "test/NACA_0021.dat"
-    ofp = "test/NACA_0021.txt"
-    ofp2 = "test/NACA_0021_2.txt"
-    ofp3 = "test/NACA_0021_3.txt"
-    if os.path.isfile(ofp):
-        os.remove(ofp)
-    reformat_foildata(ifp, ofp)
-    if os.path.isfile(ofp2):
-        os.remove(ofp2)
-    reformat_foildata(ifp, ofp2, startline=118)
-    if os.path.isfile(ofp3):
-        os.remove(ofp3)
-    reformat_foildata(ifp, ofp3, startline=118, stopline=119)
-    
-
-def test_foildata_mirror():
-    """Test `FoilData.mirror`."""
-    fd = FoilData()
-    fd.cl = np.linspace(1, 20, 10)
-    fd.alpha = np.linspace(-5, 10, 10)
-    fd.cd = np.linspace(0.001, 0.01, 10)
-    fd.cm = np.linspace(0.5, 50, 10)
-    fd.mirror()
-    print(fd.alpha)
-    assert fd.alpha[0] == -10.0
-    assert fd.cl[0] == -fd.cl[-1]
-    assert fd.cd[0] == fd.cd[-1]
-    assert fd.cm[0] == -fd.cm[-1]
-
-    
-def test_mirror_foildata():
-    """Test `mirror_foildata`."""
-    reformat_foildata("test/NACA_0021.dat", "test/NACA_0021_4.txt",
-                      startline=57)
-    mirror_foildata("test/NACA_0021_4.txt", "test/NACA_0021_4_m.txt")

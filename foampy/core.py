@@ -1,7 +1,5 @@
-"""
-This module contains some useful classes and scripts for working with
-OpenFOAM.
-"""
+"""Core functionality for foamPy."""
+
 from __future__ import division, print_function
 import numpy as np
 import os
@@ -9,7 +7,8 @@ import re
 import datetime
 import sys
 import time
-from .dictionaries import system_dicts, constant_dicts
+import subprocess
+from .dictionaries import *
 
 
 def load_torque_drag_old(casedir="", folder="0", filename=None):
@@ -565,3 +564,55 @@ def read_log_end(logname, nlines=20):
                 block -= 1
     log = data.splitlines()[-window:]
     return [line.decode("utf-8") for line in log]
+
+
+def get_n_processors(casedir="./", dictpath="system/decomposeParDict"):
+    """Read number of processors from decomposeParDict."""
+    dictpath = os.path.join(casedir, dictpath)
+    with open(dictpath) as f:
+        for line in f.readlines():
+            line = line.strip().replace(";", " ")
+            if line:
+                line = line.split()
+                if line[0] == "numberOfSubdomains":
+                    return int(line[1])
+
+
+def run(appname, tee=False, logname=None, parallel=False, nproc=None, args=[],
+        overwrite=False, append=False):
+    """Run an application."""
+    if logname is None:
+        logname = "log." + appname
+    if os.path.isfile(logname) and not overwrite and not append:
+        raise IOError(logname + " exists; remove or use overwrite=True")
+    if nproc is not None:
+        if nproc > 1:
+            parallel = True
+    if parallel and nproc is None:
+        nproc = get_n_processors()
+    if isinstance(args, list):
+        args = " ".join(args)
+    if parallel:
+        cmd = "mpirun -np {nproc} {app} -parallel {args}"
+    else:
+        cmd = "{app} {args}"
+    if tee:
+        cmd += " 2>&1 | tee {logname}"
+        if append:
+            cmd += " -a"
+    else:
+        cmd += " > {logname} 2>&1"
+        if append:
+            cmd = cmd.replace(" > ", " >> ")
+    if parallel:
+        print("Running {appname} on {n} processors".format(appname=appname,
+              n=nproc))
+    else:
+        print("Running " + appname)
+    subprocess.call(cmd.format(nproc=nproc, app=appname, args=args,
+                               logname=logname), shell=True)
+
+
+def run_parallel(appname, **kwargs):
+    """Run application in parallel."""
+    run(appname, parallel=True, **kwargs)

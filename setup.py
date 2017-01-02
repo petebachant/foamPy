@@ -12,7 +12,7 @@ setup(
     version=__version__,
     author="Pete Bachant",
     author_email="petebachant@gmail.com",
-    packages=["foampy"],
+    packages=["foampy", "foampy.tests"],
     scripts=["scripts/foampy-progress-gui",
              "scripts/foampy-progress",
              "scripts/foampy-load-surfaces",

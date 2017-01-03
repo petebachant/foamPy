@@ -8,6 +8,8 @@ import datetime
 import sys
 import time
 import subprocess
+import pandas
+import glob
 from .dictionaries import *
 
 
@@ -326,19 +328,28 @@ def get_endtime():
     return endtime
 
 
-def get_deltat():
+def get_deltat(casedir="./"):
     """Get run deltaT"""
-    with open("system/controlDict", "r") as f:
+    fpath = os.path.join(casedir, "system", "controlDict")
+    with open(fpath) as f:
         for line in f.readlines():
             line = line.replace(";", "").split()
             if "deltaT" in line and line[0] == "deltaT":
                 deltat = float(line[1])
     return deltat
 
-def get_ncells(logname="log.checkMesh", keyword="cells"):
+
+def get_ncells(casedir="./", logname="log.checkMesh", keyword="cells",
+               autogen=True):
+    fpath = os.path.join(casedir, logname)
+    if not os.path.isfile(fpath) and autogen:
+        start_dir = os.getcwd()
+        os.chdir(casedir)
+        run("checkMesh", args="-time 0")
+        os.chdir(start_dir)
     if keyword == "cells":
         keyword = "cells:"
-    with open(logname) as f:
+    with open(fpath) as f:
         for line in f.readlines():
             ls = line.split()
             if ls and ls[0] == keyword:
@@ -355,17 +366,17 @@ def get_max_courant_no():
                     return float(ls[1])
 
 
-def read_dict(dictname, casedir=""):
+def read_dict(dictname=None, dictpath=None, casedir="./"):
     """Read an OpenFOAM dict into a Python dict. Right now this is quite
     crude, but gets the job done decently for 1 word parameters."""
     foamdict = {}
-    if dictname in system_dicts:
-        p = "system/" + dictname
-    elif dictname in constant_dicts:
-        p = "constant/" + dictname
-    elif dictname == "blockMeshDict":
-        p = "constant/polyMesh/" + dictname
-    with open(p) as f:
+    if dictpath is None and dictname is not None:
+        if dictname in system_dicts:
+            p = "system/" + dictname
+        elif dictname in constant_dicts:
+            p = "constant/" + dictname
+        dictpath = os.path.join(casedir, p)
+    with open(dictpath) as f:
         for line in f.readlines():
             if ";" in line:
                 line = line.replace(";", "")
@@ -444,17 +455,25 @@ solidBodyMotionFvMeshCoeffs
         f.write(alltxt)
 
 
-def get_solver_times(solver="pimpleDyMFoam", window=400):
+def get_solver_times(casedir="./", solver=None, log_fpath=None, window=400):
     """Read last N lines from file solver log and return t (current Time),
-    deltaT, and clockTime"""
-    with open("log."+solver, "rb") as f:
+    `deltaT`, and `clockTime`.
+    """
+    if log_fpath is None and solver is None:
+        log_fpath = "log." + read_dict("controlDict",
+                                       casedir=casedir)["application"]
+        if not os.path.isfile(log_fpath):
+            log_fpath = glob.glob(os.path.join(casedir, "log.*Foam"))[0]
+    elif log_fpath is None and solver is not None:
+        log_fpath = os.path.join(casedir, "log." + solver)
+    with open(log_fpath, "rb") as f:
         BUFSIZ = 1024
         # True if open() was overridden and file was opened in text
         # mode. In that case readlines() will return unicode strings
         # instead of bytes.
-        encoded = getattr(f, 'encoding', False)
-        CR = '\n' if encoded else b'\n'
-        data = '' if encoded else b''
+        encoded = getattr(f, "encoding", False)
+        CR = "\n" if encoded else b"\n"
+        data = "" if encoded else b""
         f.seek(0, os.SEEK_END)
         fsize = f.tell()
         block = -1
@@ -491,13 +510,13 @@ def get_solver_times(solver="pimpleDyMFoam", window=400):
                 deltat.append(float(line[-1]))
         except:
             pass
-    return t, deltat, exectime
+    return {"time": t, "delta_t": deltat, "exectime": exectime,
+            "clocktime": clocktime}
 
 
 def monitor_progress():
     """Monitor solver progress."""
     controldict = read_dict("controlDict")
-    solver = controldict["application"]
     endtime = float(controldict["endTime"])
     done = False
     try:
@@ -508,13 +527,19 @@ def monitor_progress():
                         done = True
                 except:
                     pass
-            t, deltat, exectime = get_solver_times(solver)
+            solver_times = get_solver_times()
+            t = solver_times["time"]
+            deltat = solver_times["delta_t"]
+            exectime = solver_times["exectime"]
             try:
                 t_per_step = exectime[-1] - exectime[-2]
                 tps2 = exectime[-2] - exectime[-3]
                 t_per_step = (t_per_step + tps2)/2
             except IndexError:
-                t, deltat, exectime = get_solver_times(solver, window=2000)
+                solver_times = get_solver_times(window=2000)
+                t = solver_times["time"]
+                deltat = solver_times["delta_t"]
+                exectime = solver_times["exectime"]
                 t_per_step = exectime[-1] - exectime[-2]
             try:
                 deltat = deltat[-1]
@@ -628,3 +653,26 @@ def fill_template(src, dest=None, **params):
         txt = f.read()
     with open(dest, "w") as f:
         f.write(txt.format(**params))
+
+
+def summary(casedir="./", **extra_params):
+    """Summarize a case and return as a pandas Series.
+
+    Parameters
+    ----------
+    casedir : str
+        Case directory to be summarized.
+    extra_params : dict
+        Key/value pairs for keywords and the functions that return their
+        respective values.
+    """
+    s = pandas.Series()
+    s["delta_t"] = get_deltat(casedir=casedir)
+    s["n_cells"] = get_ncells(casedir=casedir)
+    td = get_solver_times(casedir=casedir)
+    s["simulated_time"] = td["time"][-1]
+    s["clocktime"] = td["clocktime"][-1]
+    s["exectime"] = td["exectime"][-1]
+    for key, val in extra_params.items():
+        s[key] = val
+    return s

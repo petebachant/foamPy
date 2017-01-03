@@ -48,3 +48,20 @@ def test_run_parallel():
 def test_get_n_processors():
     n = foampy.get_n_processors(casedir="test")
     assert n == 6
+
+
+def test_summary():
+    s = foampy.summary(casedir="test")
+    assert s.delta_t == 2e-4
+
+
+def test_get_solver_times():
+    td = foampy.get_solver_times(log_fpath="test/log.icoFoam")
+    assert td["time"][-1] == 0.04
+    assert td["clocktime"][-1] == 0
+    assert td["exectime"][-1] == 0.02
+
+
+def test_read_dict():
+    d = foampy.read_dict(casedir="test", dictname="controlDict")
+    assert d["application"] == "pimpleDyMFoam"

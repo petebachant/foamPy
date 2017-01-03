@@ -8,15 +8,16 @@ from foampy.dictionaries import *
 def test_replace_value():
     """Test the `replace_value` function."""
     print("\nTesting dictionaries.replace_value")
-    orig = read_single_line_value("blockMeshDict", "convertToMeters",
+    orig = read_single_line_value(dictname="blockMeshDict",
+                                  keyword="convertToMeters",
                                   casedir="./test", dtype=int)
-    replace_value("test/constant/polyMesh/blockMeshDict", "convertToMeters",
-                  555)
-    assert read_single_line_value("blockMeshDict", "convertToMeters",
+    replace_value("test/system/blockMeshDict", "convertToMeters", 555)
+    assert read_single_line_value(dictname="blockMeshDict",
+                                  keyword="convertToMeters",
                                   casedir="./test") == 555
-    replace_value("test/constant/polyMesh/blockMeshDict", "convertToMeters",
-                  orig)
-    assert read_single_line_value("blockMeshDict", "convertToMeters",
+    replace_value("test/system/blockMeshDict", "convertToMeters", orig)
+    assert read_single_line_value(dictname="blockMeshDict",
+                                  keyword="convertToMeters",
                                   casedir="./test") == orig
 
 

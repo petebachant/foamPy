@@ -1,10 +1,11 @@
 """Functions for reading and writing dictionaries."""
 
 from __future__ import division, print_function
+import os
 
 
 system_dicts = ["controlDict", "snappyHexMeshDict", "fvSchemes", "fvSolution",
-                "fvOptions", "decomposeParDict", "topoSetDict"]
+                "fvOptions", "decomposeParDict", "topoSetDict", "blockMeshDict"]
 constant_dicts = ["dynamicMeshDict", "RASProperties", "transportProperties",
                   "turbulenceProperties"]
 
@@ -85,23 +86,20 @@ def read_text(dictpath, keyword):
     return lines[nstart:nend+1]
 
 
-def read_single_line_value(dictname, objname, dtype=float, casedir=""):
+def read_single_line_value(dictname=None, dictpath=None, keyword="",
+                           dtype=float, casedir="./"):
     """Read value from a dictionary that appears on a single line."""
-    # Backwards compatibility
-    valtype = dtype
-    if casedir:
-        p = casedir + "/"
-    else:
-        p = ""
-    if dictname in constant_dicts:
-        p += "constant/" + dictname
-    elif dictname in system_dicts:
-        p += "system/" + dictname
-    elif dictname == "blockMeshDict":
-        p += "constant/polyMesh/blockMeshDict"
-    with open(p) as f:
+    if dictpath is None and dictname is not None:
+        if dictname in system_dicts:
+            dictpath = os.path.join(casedir, "system", dictname)
+        elif dictname in constant_dicts:
+            dictpath = os.path.join(casedir, "constant", dictname)
+    elif dictpath is None and dictname is None:
+        raise ValueError("Neither dictionary name nor dictionary path supplied")
+    with open(dictpath) as f:
         for line in f.readlines():
+            line = line.strip()
             if ";" in line:
                 ls = line.replace(";", " ").split()
-                if ls[0] == objname:
-                    return valtype(ls[1])
+                if ls[0] == keyword:
+                    return dtype(ls[1])

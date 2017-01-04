@@ -676,3 +676,22 @@ def summary(casedir="./", **extra_params):
     for key, val in extra_params.items():
         s[key] = val
     return s
+
+
+def clean(leave_mesh=False, remove_zero=False, extra=[]):
+    """Clean case."""
+    if not leave_mesh:
+        subprocess.call(". $WM_PROJECT_DIR/bin/tools/CleanFunctions && "
+                        "cleanCase", shell=True)
+    else:
+        subprocess.call(". $WM_PROJECT_DIR/bin/tools/CleanFunctions && "
+                        "cleanTimeDirectories && cleanDynamicCode", shell=True)
+        subprocess.call("rm -rf postProcessing", shell=True)
+    if remove_zero:
+        subprocess.call("rm -rf 0", shell=True)
+    if extra:
+        if not isinstance(extra, list):
+            extra = [extra]
+        for item in extra:
+            print("Removing", item)
+            subprocess.call("rm -rf {}".format(item), shell=True)

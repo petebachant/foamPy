@@ -13,116 +13,46 @@ import glob
 from .dictionaries import *
 
 
-def load_torque_drag_old(casedir="", folder="0", filename=None):
-    """Loads time, z-axis torque, and streamwise force from specified forces
-    folder. Case name can be left empty if running within a case folder."""
-    regex = r"([0-9.eE\-+]+)\s+\(+([0-9.eE\-+]+)\s([0-9.eE\-+]+)\s([0-9.eE\-+]+)\)"
-    regex += r"\,\(([0-9.eE\-+]+)\s([0-9.eE\-+]+)\s([0-9.eE\-+]+)\)"
-    regex += r"\,\(([0-9.eE\-+]+)\s([0-9.eE\-+]+)\s([0-9.eE\-+]+)\)+"
-    regex += r"\s+\(+([0-9.eE\-+]+)\s([0-9.eE\-+]+)\s([0-9.eE\-+]+)\)"
-    regex += r"\,\(([0-9.eE\-+]+)\s([0-9.eE\-+]+)\s([0-9.eE\-+]+)\)"
-    regex += r"\,\(([0-9.eE\-+]+)\s([0-9.eE\-+]+)\s([0-9.eE\-+]+)\)+"
-    # Create empty lists
-    t = []
-    fpx = []; fpy = []; fpz = []
-    fpox = []; fpoy = []; fpoz = []
-    fvx = []; fvy = []; fvz = []
-    mpx = []; mpy = []; mpz = []
-    mpox = []; mpoy = []; mpoz = []
-    mvx = []; mvy = []; mvz = []
-    # Cycle through file
-    if casedir: casedir += "/"
-    if not filename: filename = "forces.dat"
-    with open(casedir+"postProcessing/forces/"+str(folder)+"/"+filename, "r") as f:
+def gen_stripped_lines(fpath):
+    with open(fpath) as f:
         for line in f.readlines():
-            match = re.search(regex,line)
-            if match:
-                t.append(float(match.group(1)))
-                fpx.append(float(match.group(2)))
-                fpy.append(float(match.group(3)))
-                fpz.append(float(match.group(4)))
-                fvx.append(float(match.group(5)))
-                fvy.append(float(match.group(6)))
-                fvz.append(float(match.group(7)))
-                fpox.append(float(match.group(8)))
-                fpoy.append(float(match.group(9)))
-                fpoz.append(float(match.group(10)))
-                mpx.append(float(match.group(11)))
-                mpy.append(float(match.group(12)))
-                mpz.append(float(match.group(13)))
-                mvx.append(float(match.group(14)))
-                mvy.append(float(match.group(15)))
-                mvz.append(float(match.group(16)))
-                mpox.append(float(match.group(17)))
-                mpoy.append(float(match.group(18)))
-                mpoz.append(float(match.group(19)))
-    #Convert to numpy arrays
-    t = np.asarray(t)
-    torque = np.asarray(np.asarray(mpz) + np.asarray(mvz))
-    drag = np.asarray(np.asarray(fpx) + np.asarray(fvx))
-    return t, torque, drag
+            yield line.replace("(", " ").replace(")", " ")
 
 
-def load_forces_moments(casedir="", folder="0", filename=None):
-    """Loads time, forces, and moments into a dictionary of Numpy arrays."""
-    # Create empty lists
-    t = []
-    fpx = []; fpy = []; fpz = []
-    fpox = []; fpoy = []; fpoz = []
-    fvx = []; fvy = []; fvz = []
-    mpx = []; mpy = []; mpz = []
-    mpox = []; mpoy = []; mpoz = []
-    mvx = []; mvy = []; mvz = []
-    # Cycle through file
-    if casedir: casedir += "/"
-    if not filename: filename = "forces.dat"
-    with open(casedir+"postProcessing/forces/"+str(folder)+"/"+filename, "r") as f:
-        for line in f.readlines():
-            line = line.replace("(", "")
-            line = line.replace(")", "")
-            line = line.replace(",", " ")
-            line = line.split()
-            if line[0] != "#":
-                t.append(float(line[0]))
-                fpx.append(float(line[1]))
-                fpy.append(float(line[2]))
-                fpz.append(float(line[3]))
-                fvx.append(float(line[4]))
-                fvy.append(float(line[5]))
-                fvz.append(float(line[6]))
-                fpox.append(float(line[7]))
-                fpoy.append(float(line[8]))
-                fpoz.append(float(line[9]))
-                mpx.append(float(line[10]))
-                mpy.append(float(line[11]))
-                mpz.append(float(line[12]))
-                mvx.append(float(line[13]))
-                mvy.append(float(line[14]))
-                mvz.append(float(line[15]))
-                mpox.append(float(line[16]))
-                mpoy.append(float(line[17]))
-                mpoz.append(float(line[18]))
-    #Convert to numpy arrays
-    data = {"time" : np.asarray(t),
-            "force" : {"pressure" : {"x" : np.asarray(fpx),
-                                     "y" : np.asarray(fpy),
-                                     "z" : np.asarray(fpz)},
-                       "viscous" : {"x" : np.asarray(fvx),
-                                    "y" : np.asarray(fvy),
-                                    "z" : np.asarray(fvz)},
-                       "porous" : {"x" : np.asarray(fpox),
-                                   "y" : np.asarray(fpoy),
-                                   "z" : np.asarray(fpoz)}},
-            "moment" : {"pressure" : {"x" : np.asarray(mpx),
-                                      "y" : np.asarray(mpy),
-                                      "z" : np.asarray(mpz)},
-                        "viscous" : {"x" : np.asarray(mvx),
-                                     "y" : np.asarray(mvy),
-                                    "z" : np.asarray(mvz)},
-                        "porous" : {"x" : np.asarray(mpox),
-                                    "y" : np.asarray(mpoy),
-                                    "z" : np.asarray(mpoz)}}}
-    return data
+def load_forces(casedir="./", start_time=0):
+    """Load forces and moments as a pandas DataFrame."""
+    glob_string = os.path.join(
+        casedir,
+        "postProcessing/forces/{}/forces*.dat".format(start_time)
+    )
+    fpath = sorted(glob.glob(glob_string))[-1]
+    data = np.loadtxt(gen_stripped_lines(fpath))
+    df = pandas.DataFrame()
+    df["time"] = data[:, 0]
+    df["fx_pressure"] = data[:, 1]
+    df["fx_viscous"] = data[:, 4]
+    df["fx_porous"] = data[:, 7]
+    df["fy_pressure"] = data[:, 2]
+    df["fy_viscous"] = data[:, 5]
+    df["fy_porous"] = data[:, 8]
+    df["fz_pressure"] = data[:, 3]
+    df["fz_viscous"] = data[:, 6]
+    df["fz_porous"] = data[:, 9]
+    df["mx_pressure"] = data[:, 10]
+    df["mx_viscous"] = data[:, 13]
+    df["mx_porous"] = data[:, 16]
+    df["my_pressure"] = data[:, 11]
+    df["my_viscous"] = data[:, 14]
+    df["my_porous"] = data[:, 17]
+    df["mz_pressure"] = data[:, 12]
+    df["mz_viscous"] = data[:, 15]
+    df["mz_porous"] = data[:, 18]
+    for fm in ["f", "m"]:
+        for component in ["x", "y", "z"]:
+            df[fm + component] = df[fm + component + "_pressure"] \
+                               + df[fm + component + "_viscous"] \
+                               + df[fm + component + "_porous"]
+    return df
 
 
 def load_torque_drag(casedir="", folder="0", filename=None,

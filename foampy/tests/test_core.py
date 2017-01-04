@@ -65,3 +65,8 @@ def test_get_solver_times():
 def test_read_dict():
     d = foampy.read_dict(casedir="test", dictname="controlDict")
     assert d["application"] == "pimpleDyMFoam"
+
+
+def test_load_forces():
+    df = foampy.load_forces(casedir="test")
+    assert df.time[0] == 2e-3

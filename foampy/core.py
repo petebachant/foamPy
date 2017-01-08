@@ -19,11 +19,11 @@ def gen_stripped_lines(fpath):
             yield line.replace("(", " ").replace(")", " ")
 
 
-def load_forces(casedir="./", start_time=0):
+def load_forces(casedir="./", object_name="forces", start_time=0):
     """Load forces and moments as a pandas DataFrame."""
     glob_string = os.path.join(
         casedir,
-        "postProcessing/forces/{}/forces*.dat".format(start_time)
+        "postProcessing/{}/{}/forces*.dat".format(object_name, start_time)
     )
     fpath = sorted(glob.glob(glob_string))[-1]
     data = np.loadtxt(gen_stripped_lines(fpath))

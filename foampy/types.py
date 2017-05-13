@@ -107,8 +107,7 @@ class FoamSubDict(OrderedDict):
 class BlockMeshDict(FoamDict):
     """Object to represent a `blockMeshDict`."""
 
-    def __init__(self, name="blockMeshDict", casedir="./",
-                 subdir="constant/polyMesh"):
+    def __init__(self, name="blockMeshDict", casedir="./", subdir="system"):
         FoamDict.__init__(self)
 
 

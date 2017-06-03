@@ -186,12 +186,9 @@ def load_theta_omega(casedir="", t_interp=[], theta_units="degrees"):
     return t, theta, omega
 
 
-def load_set(casedir="", name="profile", quantity="U", fmt="xy", axis="xyz"):
+def load_set(casedir="./", name="profile", quantity="U", fmt="xy", axis="xyz"):
     """Imports text data created with the OpenFOAM sample utility"""
-    if casedir != "":
-        folder = casedir + "/postProcessing/sets"
-    else:
-        folder = "postProcessing/sets"
+    folder = os.path.join(casedir, "postProcessing", "sets")
     t = []
     times = os.listdir(folder)
     for time1 in times:

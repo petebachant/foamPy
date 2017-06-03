@@ -70,3 +70,10 @@ def test_read_dict():
 def test_load_forces():
     df = foampy.load_forces(casedir="test")
     assert df.time[0] == 2e-3
+
+
+def test_load_probes_data():
+    df = foampy.load_probes_data(casedir="test")
+    print(df)
+    df2 = foampy.load_probes_data(casedir="test", field_name="p")
+    print(df2)

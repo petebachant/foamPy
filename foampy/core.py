@@ -55,6 +55,34 @@ def load_forces(casedir="./", object_name="forces", start_time=0):
     return df
 
 
+def load_probes_data(casedir="./", object_name="probes", start_time=0,
+                     field_name="U"):
+    """Load probes data as pandas ``DataFrame``."""
+    fpath = os.path.join(casedir, "postProcessing", object_name,
+                         str(start_time), field_name)
+    # First get probe locations to use as column names
+    with open(fpath) as f:
+        txt = f.read()
+    probe_lines = re.findall(r"# Probe \d.*\n", txt)
+    probe_locs = []
+    for line in probe_lines:
+        probe_locs.append(line.split("(")[-1].split(")")[0].split())
+    data = np.loadtxt(gen_stripped_lines(fpath))
+    df = pandas.DataFrame()
+    df["time"] = data[:, 0]
+    # Determine the rank of the data
+    nprobes = len(probe_locs)
+    nsamps = data.shape[0]
+    dims = (data.shape[1] - 1) // nprobes
+    for n, probe_loc in enumerate(probe_locs):
+        probe_loc = [float(pl) for pl in probe_loc]
+        d = data[:, n + 1:n + dims + 1]
+        if dims > 1:
+            d = [tuple(p) for p in d]
+        df[tuple(probe_loc)] = d
+    return df
+
+
 def load_torque_drag(casedir="", folder="0", filename=None,
                      torque_axis="z", drag_axis="x"):
     """Loads time, z-axis torque, and streamwise force from specified forces

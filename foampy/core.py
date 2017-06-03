@@ -154,7 +154,7 @@ def load_all_torque_drag(casedir="", torque_axis="z", drag_axis="x"):
 
 
 def load_theta_omega(casedir="", t_interp=[], theta_units="degrees"):
-    """Imports omega from dynamicMeshDict table. Returns t, theta,
+    """Import omega from ``dynamicMeshDict`` table. Returns t, theta,
     omega (rad/s) where theta is calculated using the trapezoidal rule.
 
     `t_interp` is a keyword argument for an array over which omega and theta
@@ -187,7 +187,7 @@ def load_theta_omega(casedir="", t_interp=[], theta_units="degrees"):
 
 
 def load_set(casedir="./", name="profile", quantity="U", fmt="xy", axis="xyz"):
-    """Imports text data created with the OpenFOAM sample utility"""
+    """Import text data created with the OpenFOAM sample utility."""
     folder = os.path.join(casedir, "postProcessing", "sets")
     t = []
     times = os.listdir(folder)
@@ -220,12 +220,9 @@ def load_set(casedir="./", name="profile", quantity="U", fmt="xy", axis="xyz"):
     return data
 
 
-def load_sample_xy(casedir="", profile="U"):
-    """Imports text data created with the OpenFOAM sample utility"""
-    if casedir != "":
-        folder = casedir + "/postProcessing/sets"
-    else:
-        folder = "postProcessing/sets"
+def load_sample_xy(casedir="./", profile="U"):
+    """Import text data created with the OpenFOAM sample utility."""
+    folder = os.path.join(casedir, "postProcessing", "sets")
     t = []
     times = os.listdir(folder)
     for time1 in times:
@@ -274,7 +271,7 @@ def load_sample_xy(casedir="", profile="U"):
 
 
 def get_endtime():
-    """Get run endTime"""
+    """Get run ``endTime``."""
     with open("system/controlDict", "r") as f:
         for line in f.readlines():
             line = line.replace(";", "").split()
@@ -284,7 +281,7 @@ def get_endtime():
 
 
 def get_deltat(casedir="./"):
-    """Get run deltaT"""
+    """Get run ``deltaT``."""
     fpath = os.path.join(casedir, "system", "controlDict")
     with open(fpath) as f:
         for line in f.readlines():

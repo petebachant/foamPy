@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+"""Create template from OpenFOAM file."""
+
+import argparse
+import foampy.templates
+
+parser = argparse.ArgumentParser(description="Create template from OpenFOAM "
+                                 "file")
+parser.add_argument("file", help="File to convert")
+parser.add_argument("--keywords", "-k", help="Keywords to convert inside "
+                    "template", nargs="+")
+parser.add_argument("--output-fname", "-o", help="Output file name")
+parser.add_argument("--template-dir", "-d", default="templates",
+                    help="Where to put templates")
+args = parser.parse_args()
+foampy.templates.make_template(
+    args.file,
+    keywords=args.keywords,
+    fname_out=args.output_fname,
+    template_dir=args.template_dir
+)

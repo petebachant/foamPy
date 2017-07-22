@@ -11,6 +11,7 @@ import subprocess
 import pandas
 import glob
 from .dictionaries import *
+from .templates import *
 
 
 def gen_stripped_lines(fpath):
@@ -593,18 +594,6 @@ def run(appname, tee=False, logname=None, parallel=False, nproc=None, args=[],
 def run_parallel(appname, **kwargs):
     """Run application in parallel."""
     run(appname, parallel=True, **kwargs)
-
-
-def fill_template(src, dest=None, **params):
-    """Fill a template file based on given parameters using new style Python
-    string formatting.
-    """
-    if dest is None:
-        dest = src.replace(".template", "")
-    with open(src) as f:
-        txt = f.read()
-    with open(dest, "w") as f:
-        f.write(txt.format(**params))
 
 
 def summary(casedir="./", **extra_params):

@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>foampy.tests.test_types &mdash; foamPy 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="foamPy 0.0.5 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> foamPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foamPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>foampy.tests.test_types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for foampy.tests.test_types</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tests for the `types` module.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">foampy.types</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="test_foamdict"><a class="viewcode-back" href="../../../foampy.tests.html#foampy.tests.test_types.test_foamdict">[docs]</a><span class="k">def</span> <span class="nf">test_foamdict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Test `FoamDict` class.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing FoamDict&quot;</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">FoamDict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;controlDict&quot;</span><span class="p">,</span> <span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;someInt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">555</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;someFloat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.5</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;someString&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;aString&quot;</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;someBool&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;someList&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FoamList</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;subDict&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FoamSubDict</span><span class="p">(</span><span class="n">otherInt</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">otherFloat</span><span class="o">=</span><span class="mf">5.555</span><span class="p">)</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;subDict&quot;</span><span class="p">][</span><span class="s2">&quot;addedLater&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">666</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;subDict&quot;</span><span class="p">][</span><span class="s2">&quot;subSubDict&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FoamSubDict</span><span class="p">(</span><span class="n">subSubBool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_foamsubdict"><a class="viewcode-back" href="../../../foampy.tests.html#foampy.tests.test_types.test_foamsubdict">[docs]</a><span class="k">def</span> <span class="nf">test_foamsubdict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Test `FoamSubDict` class.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing FoamSubDict&quot;</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">FoamSubDict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;FoamFile&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dictionary&quot;</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;blockMeshDict&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_foamlist"><a class="viewcode-back" href="../../../foampy.tests.html#foampy.tests.test_types.test_foamlist">[docs]</a><span class="k">def</span> <span class="nf">test_foamlist</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Test `FoamList` class.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing FoamList&quot;</span><span class="p">)</span>
+    <span class="n">flist</span> <span class="o">=</span> <span class="n">FoamList</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">flist</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">flist</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="n">flist2</span> <span class="o">=</span> <span class="n">FoamList</span><span class="p">([</span><span class="n">flist</span><span class="p">,</span> <span class="n">flist</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">FoamList</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">flist2</span><span class="p">)</span>
+
+    <span class="n">flist</span> <span class="o">=</span> <span class="n">FoamList</span><span class="p">(</span><span class="s2">&quot;(0 0 0 0)&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">flist</span><span class="p">[:]</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Pete Bachant.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

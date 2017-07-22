@@ -1,0 +1,591 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>foampy package &mdash; foamPy 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="foamPy 0.0.5 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> foamPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">foampy package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-foampy.case">foampy.case module</a></li>
+<li><a class="reference internal" href="#module-foampy.core">foampy.core module</a></li>
+<li><a class="reference internal" href="#module-foampy.dictionaries">foampy.dictionaries module</a></li>
+<li><a class="reference internal" href="#module-foampy.foil">foampy.foil module</a></li>
+<li><a class="reference internal" href="#foampy-gui-module">foampy.gui module</a></li>
+<li><a class="reference internal" href="#module-foampy.templates">foampy.templates module</a></li>
+<li><a class="reference internal" href="#module-foampy.types">foampy.types module</a></li>
+<li><a class="reference internal" href="#module-foampy">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">foamPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>foampy package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/foampy.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="foampy-package">
+<h1>foampy package<a class="headerlink" href="#foampy-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="foampy.tests.html">foampy.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foampy.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foampy.tests.html#module-foampy.tests.test_core">foampy.tests.test_core module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foampy.tests.html#module-foampy.tests.test_dictionaries">foampy.tests.test_dictionaries module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foampy.tests.html#module-foampy.tests.test_foil">foampy.tests.test_foil module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foampy.tests.html#module-foampy.tests.test_templates">foampy.tests.test_templates module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foampy.tests.html#module-foampy.tests.test_types">foampy.tests.test_types module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foampy.tests.html#module-foampy.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-foampy.case">
+<span id="foampy-case-module"></span><h2>foampy.case module<a class="headerlink" href="#module-foampy.case" title="Permalink to this headline">¶</a></h2>
+<p>Module to contain <code class="docutils literal"><span class="pre">Case</span></code> object.</p>
+<dl class="class">
+<dt id="foampy.case.Case">
+<em class="property">class </em><code class="descclassname">foampy.case.</code><code class="descname">Case</code><span class="sig-paren">(</span><em>casedir=’./’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/case.html#Case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.case.Case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Object to represent an entire OpenFOAM case.</p>
+<p>This should contain a list of dictionaries, some mandatory, some optional.</p>
+<dl class="method">
+<dt id="foampy.case.Case.read">
+<code class="descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/case.html#Case.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.case.Case.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read all dictionaries present.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-foampy.core">
+<span id="foampy-core-module"></span><h2>foampy.core module<a class="headerlink" href="#module-foampy.core" title="Permalink to this headline">¶</a></h2>
+<p>Core functionality for foamPy.</p>
+<dl class="function">
+<dt id="foampy.core.clean">
+<code class="descclassname">foampy.core.</code><code class="descname">clean</code><span class="sig-paren">(</span><em>leave_mesh=False</em>, <em>remove_zero=False</em>, <em>extra=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean case.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.gen_dynmeshdict">
+<code class="descclassname">foampy.core.</code><code class="descname">gen_dynmeshdict</code><span class="sig-paren">(</span><em>U</em>, <em>R</em>, <em>meantsr</em>, <em>cellzone=’AMIsurface’</em>, <em>rpm_fluc=3.7</em>, <em>npoints=400</em>, <em>axis=’(0 0 1)’</em>, <em>direction=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#gen_dynmeshdict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.gen_dynmeshdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dynamicMeshDict for a given U, R, meantsr, and an optional
+rpm fluctuation amplitude. Phase is fixed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.gen_stripped_lines">
+<code class="descclassname">foampy.core.</code><code class="descname">gen_stripped_lines</code><span class="sig-paren">(</span><em>fpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#gen_stripped_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.gen_stripped_lines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.get_deltat">
+<code class="descclassname">foampy.core.</code><code class="descname">get_deltat</code><span class="sig-paren">(</span><em>casedir=’./’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#get_deltat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.get_deltat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get run <code class="docutils literal"><span class="pre">deltaT</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.get_endtime">
+<code class="descclassname">foampy.core.</code><code class="descname">get_endtime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#get_endtime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.get_endtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get run <code class="docutils literal"><span class="pre">endTime</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.get_max_courant_no">
+<code class="descclassname">foampy.core.</code><code class="descname">get_max_courant_no</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#get_max_courant_no"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.get_max_courant_no" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.get_n_processors">
+<code class="descclassname">foampy.core.</code><code class="descname">get_n_processors</code><span class="sig-paren">(</span><em>casedir=’./’</em>, <em>dictpath=’system/decomposeParDict’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#get_n_processors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.get_n_processors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read number of processors from decomposeParDict.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.get_ncells">
+<code class="descclassname">foampy.core.</code><code class="descname">get_ncells</code><span class="sig-paren">(</span><em>casedir=’./’</em>, <em>logname=’log.checkMesh’</em>, <em>keyword=’cells’</em>, <em>autogen=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#get_ncells"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.get_ncells" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.get_solver_times">
+<code class="descclassname">foampy.core.</code><code class="descname">get_solver_times</code><span class="sig-paren">(</span><em>casedir=’./’</em>, <em>solver=None</em>, <em>log_fpath=None</em>, <em>window=400</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#get_solver_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.get_solver_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read last N lines from file solver log and return t (current Time),
+<cite>deltaT</cite>, and <cite>clockTime</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.load_all_torque_drag">
+<code class="descclassname">foampy.core.</code><code class="descname">load_all_torque_drag</code><span class="sig-paren">(</span><em>casedir=”</em>, <em>torque_axis=’z’</em>, <em>drag_axis=’x’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#load_all_torque_drag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.load_all_torque_drag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.load_forces">
+<code class="descclassname">foampy.core.</code><code class="descname">load_forces</code><span class="sig-paren">(</span><em>casedir=’./’</em>, <em>object_name=’forces’</em>, <em>start_time=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#load_forces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.load_forces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load forces and moments as a pandas DataFrame.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.load_probes_data">
+<code class="descclassname">foampy.core.</code><code class="descname">load_probes_data</code><span class="sig-paren">(</span><em>casedir=’./’</em>, <em>object_name=’probes’</em>, <em>start_time=0</em>, <em>field_name=’U’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#load_probes_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.load_probes_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load probes data as pandas <code class="docutils literal"><span class="pre">DataFrame</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.load_sample_xy">
+<code class="descclassname">foampy.core.</code><code class="descname">load_sample_xy</code><span class="sig-paren">(</span><em>casedir=’./’</em>, <em>profile=’U’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#load_sample_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.load_sample_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import text data created with the OpenFOAM sample utility.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.load_set">
+<code class="descclassname">foampy.core.</code><code class="descname">load_set</code><span class="sig-paren">(</span><em>casedir=’./’</em>, <em>name=’profile’</em>, <em>quantity=’U’</em>, <em>fmt=’xy’</em>, <em>axis=’xyz’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#load_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.load_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import text data created with the OpenFOAM sample utility.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.load_theta_omega">
+<code class="descclassname">foampy.core.</code><code class="descname">load_theta_omega</code><span class="sig-paren">(</span><em>casedir=”</em>, <em>t_interp=[]</em>, <em>theta_units=’degrees’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#load_theta_omega"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.load_theta_omega" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import omega from <code class="docutils literal"><span class="pre">dynamicMeshDict</span></code> table. Returns t, theta,
+omega (rad/s) where theta is calculated using the trapezoidal rule.</p>
+<p><cite>t_interp</cite> is a keyword argument for an array over which omega and theta
+will be interpolated.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.load_torque_drag">
+<code class="descclassname">foampy.core.</code><code class="descname">load_torque_drag</code><span class="sig-paren">(</span><em>casedir=”</em>, <em>folder=‘0’</em>, <em>filename=None</em>, <em>torque_axis=’z’</em>, <em>drag_axis=’x’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#load_torque_drag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.load_torque_drag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads time, z-axis torque, and streamwise force from specified forces
+folder. Case name can be left empty if running within a case folder.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.monitor_progress">
+<code class="descclassname">foampy.core.</code><code class="descname">monitor_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#monitor_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.monitor_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Monitor solver progress.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.read_case">
+<code class="descclassname">foampy.core.</code><code class="descname">read_case</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#read_case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.read_case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will eventually read all case dicts and put in a hierarchy of dicts.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.read_dict">
+<code class="descclassname">foampy.core.</code><code class="descname">read_dict</code><span class="sig-paren">(</span><em>dictname=None</em>, <em>dictpath=None</em>, <em>casedir=’./’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#read_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.read_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an OpenFOAM dict into a Python dict. Right now this is quite
+crude, but gets the job done decently for 1 word parameters.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.read_log_end">
+<code class="descclassname">foampy.core.</code><code class="descname">read_log_end</code><span class="sig-paren">(</span><em>logname</em>, <em>nlines=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#read_log_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.read_log_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read last lines from log and return as a list.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.run">
+<code class="descclassname">foampy.core.</code><code class="descname">run</code><span class="sig-paren">(</span><em>appname</em>, <em>tee=False</em>, <em>logname=None</em>, <em>parallel=False</em>, <em>nproc=None</em>, <em>args=[]</em>, <em>overwrite=False</em>, <em>append=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run an application.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.run_parallel">
+<code class="descclassname">foampy.core.</code><code class="descname">run_parallel</code><span class="sig-paren">(</span><em>appname</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#run_parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.run_parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run application in parallel.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.core.summary">
+<code class="descclassname">foampy.core.</code><code class="descname">summary</code><span class="sig-paren">(</span><em>casedir=’./’</em>, <em>**extra_params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/core.html#summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.core.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Summarize a case and return as a pandas Series.</p>
+<dl class="docutils">
+<dt>casedir <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Case directory to be summarized.</dd>
+<dt>extra_params <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd>Key/value pairs for keywords and the functions that return their
+respective values.</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-foampy.dictionaries">
+<span id="foampy-dictionaries-module"></span><h2>foampy.dictionaries module<a class="headerlink" href="#module-foampy.dictionaries" title="Permalink to this headline">¶</a></h2>
+<p>Functions for reading and writing dictionaries.</p>
+<dl class="function">
+<dt id="foampy.dictionaries.build_header">
+<code class="descclassname">foampy.dictionaries.</code><code class="descname">build_header</code><span class="sig-paren">(</span><em>dictobject=”</em>, <em>version=‘2.3.x’</em>, <em>fileclass=’dictionary’</em>, <em>incl_foamfile=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/dictionaries.html#build_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.dictionaries.build_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the header for an OpenFOAM dictionary. Inputs are the
+object and version.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.dictionaries.read_single_line_value">
+<code class="descclassname">foampy.dictionaries.</code><code class="descname">read_single_line_value</code><span class="sig-paren">(</span><em>dictname=None</em>, <em>dictpath=None</em>, <em>keyword=”</em>, <em>dtype=&lt;class ‘float’&gt;</em>, <em>casedir=’./’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/dictionaries.html#read_single_line_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.dictionaries.read_single_line_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read value from a dictionary that appears on a single line.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.dictionaries.read_text">
+<code class="descclassname">foampy.dictionaries.</code><code class="descname">read_text</code><span class="sig-paren">(</span><em>dictpath</em>, <em>keyword</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/dictionaries.html#read_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.dictionaries.read_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="foampy.dictionaries.replace_value">
+<code class="descclassname">foampy.dictionaries.</code><code class="descname">replace_value</code><span class="sig-paren">(</span><em>dictpath</em>, <em>keyword</em>, <em>newvalue</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/dictionaries.html#replace_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.dictionaries.replace_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace a value in a dictionary.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-foampy.foil">
+<span id="foampy-foil-module"></span><h2>foampy.foil module<a class="headerlink" href="#module-foampy.foil" title="Permalink to this headline">¶</a></h2>
+<p>Module for working with foil data.</p>
+<dl class="class">
+<dt id="foampy.foil.FoilData">
+<em class="property">class </em><code class="descclassname">foampy.foil.</code><code class="descname">FoilData</code><a class="reference internal" href="_modules/foampy/foil.html#FoilData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.foil.FoilData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Object that represents a foil characteristic database.</p>
+<dl class="method">
+<dt id="foampy.foil.FoilData.mirror">
+<code class="descname">mirror</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/foil.html#FoilData.mirror"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.foil.FoilData.mirror" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mirror positive coefficients about zero degrees angle of attack.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="foampy.foil.FoilData.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>fpath</em>, <em>startline=None</em>, <em>stopline=None</em>, <em>comments=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/foil.html#FoilData.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.foil.FoilData.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads foil data from file. Format is detected automatically, but
+column order is not.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="foampy.foil.FoilData.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>fpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/foil.html#FoilData.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.foil.FoilData.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write foil data to file in OpenFOAM format.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.foil.mirror_foildata">
+<code class="descclassname">foampy.foil.</code><code class="descname">mirror_foildata</code><span class="sig-paren">(</span><em>inpath</em>, <em>outpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/foil.html#mirror_foildata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.foil.mirror_foildata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mirror positive data in file about zero angle of attack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.foil.reformat_foildata">
+<code class="descclassname">foampy.foil.</code><code class="descname">reformat_foildata</code><span class="sig-paren">(</span><em>input_path</em>, <em>output_path</em>, <em>startline=None</em>, <em>stopline=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/foil.html#reformat_foildata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.foil.reformat_foildata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reformat foil data file into a list of 4-element OpenFOAM lists.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="foampy-gui-module">
+<h2>foampy.gui module<a class="headerlink" href="#foampy-gui-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-foampy.templates">
+<span id="foampy-templates-module"></span><h2>foampy.templates module<a class="headerlink" href="#module-foampy.templates" title="Permalink to this headline">¶</a></h2>
+<p>Code related to templating.</p>
+<dl class="function">
+<dt id="foampy.templates.fill_template">
+<code class="descclassname">foampy.templates.</code><code class="descname">fill_template</code><span class="sig-paren">(</span><em>src</em>, <em>dest=None</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/templates.html#fill_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.templates.fill_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill a template file based on given parameters using new style Python
+string formatting.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.templates.gen_from_template_dir">
+<code class="descclassname">foampy.templates.</code><code class="descname">gen_from_template_dir</code><span class="sig-paren">(</span><em>fpath_out</em>, <em>template_dir=’templates’</em>, <em>fname_out=None</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/templates.html#gen_from_template_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.templates.gen_from_template_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a file from a template with the same relative path inside
+<code class="docutils literal"><span class="pre">template_dir</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.templates.make_template">
+<code class="descclassname">foampy.templates.</code><code class="descname">make_template</code><span class="sig-paren">(</span><em>fpath</em>, <em>template_dir=’templates’</em>, <em>keywords=[]</em>, <em>git=True</em>, <em>delete=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/templates.html#make_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.templates.make_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an OpenFOAM dictionary to a template for use with Python’s
+string formatting.</p>
+<dl class="docutils">
+<dt>fpath <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Path to file to be converted to a template.</dd>
+<dt>template_dir <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Path to directory in which to store templates.</dd>
+<dt>keywords <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>List of strings to setup as formatted keywords in template.</dd>
+<dt>git <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>If <code class="docutils literal"><span class="pre">True</span></code>, attempt to remove file from Git repo and add to
+<code class="docutils literal"><span class="pre">.gitignore</span></code> file.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="foampy.templates.to_snake_case">
+<code class="descclassname">foampy.templates.</code><code class="descname">to_snake_case</code><span class="sig-paren">(</span><em>keyword</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/templates.html#to_snake_case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.templates.to_snake_case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a keyword to snake case.</p>
+<p>From <a class="reference external" href="https://stackoverflow.com/questions/1175208">https://stackoverflow.com/questions/1175208</a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-foampy.types">
+<span id="foampy-types-module"></span><h2>foampy.types module<a class="headerlink" href="#module-foampy.types" title="Permalink to this headline">¶</a></h2>
+<p>This module contains classes to work with custom OpenFOAM classes, e.g., lists
+and dictionaries.</p>
+<dl class="class">
+<dt id="foampy.types.BlockMeshDict">
+<em class="property">class </em><code class="descclassname">foampy.types.</code><code class="descname">BlockMeshDict</code><span class="sig-paren">(</span><em>name=’blockMeshDict’</em>, <em>casedir=’./’</em>, <em>subdir=’system’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/types.html#BlockMeshDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.types.BlockMeshDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#foampy.types.FoamDict" title="foampy.types.FoamDict"><code class="xref py py-class docutils literal"><span class="pre">foampy.types.FoamDict</span></code></a></p>
+<p>Object to represent a <cite>blockMeshDict</cite>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="foampy.types.FoamDict">
+<em class="property">class </em><code class="descclassname">foampy.types.</code><code class="descname">FoamDict</code><span class="sig-paren">(</span><em>name=”</em>, <em>casedir=’./’</em>, <em>subdir=’system’</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/types.html#FoamDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.types.FoamDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">collections.OrderedDict</span></code></p>
+<p>Object that represents an OpenFOAM dictionary.</p>
+<dl class="method">
+<dt id="foampy.types.FoamDict.read">
+<code class="descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/types.html#FoamDict.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.types.FoamDict.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="foampy.types.FoamDict.write">
+<code class="descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/types.html#FoamDict.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.types.FoamDict.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write dictionary to file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="foampy.types.FoamList">
+<em class="property">class </em><code class="descclassname">foampy.types.</code><code class="descname">FoamList</code><span class="sig-paren">(</span><em>list_in=None</em>, <em>dtype=&lt;class ‘float’&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/types.html#FoamList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.types.FoamList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">list</span></code></p>
+<p>Class that represents an OpenFOAM list.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="foampy.types.FoamSubDict">
+<em class="property">class </em><code class="descclassname">foampy.types.</code><code class="descname">FoamSubDict</code><span class="sig-paren">(</span><em>name=”</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/foampy/types.html#FoamSubDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#foampy.types.FoamSubDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">collections.OrderedDict</span></code></p>
+<p>Object to represent a dictionary inside a dictionary.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-foampy">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-foampy" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Pete Bachant.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

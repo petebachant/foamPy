@@ -7,3 +7,4 @@ MANIFEST
 *.txt
 foamPy.egg-info
 .cache
+doc/_build

@@ -34,6 +34,9 @@ def make_template(fpath, template_dir="templates", keywords=[], git=True,
         ``.gitignore`` file.
     """
     fpath_template = os.path.join(template_dir, fpath)
+    template_subdir = os.path.join(template_dir, os.path.dirname(fpath))
+    if not os.path.isdir(template_subdir):
+        os.makedirs(template_subdir)
     with open(fpath) as f:
         txt = f.read()
     new_txt = ""

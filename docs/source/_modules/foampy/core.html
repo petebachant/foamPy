@@ -1,0 +1,859 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>foampy.core &mdash; foamPy 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="foamPy 0.0.5 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> foamPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">foamPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>foampy.core</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for foampy.core</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Core functionality for foamPy.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">.dictionaries</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.templates</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="gen_stripped_lines"><a class="viewcode-back" href="../../foampy.html#foampy.core.gen_stripped_lines">[docs]</a><span class="k">def</span> <span class="nf">gen_stripped_lines</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_forces"><a class="viewcode-back" href="../../foampy.html#foampy.core.load_forces">[docs]</a><span class="k">def</span> <span class="nf">load_forces</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">object_name</span><span class="o">=</span><span class="s2">&quot;forces&quot;</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load forces and moments as a pandas DataFrame.&quot;&quot;&quot;</span>
+    <span class="n">glob_string</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">casedir</span><span class="p">,</span>
+        <span class="s2">&quot;postProcessing/</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">/forces*.dat&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">object_name</span><span class="p">,</span> <span class="n">start_time</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">glob_string</span><span class="p">))[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">gen_stripped_lines</span><span class="p">(</span><span class="n">fpath</span><span class="p">))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;fx_pressure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;fx_viscous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;fx_porous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">7</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;fy_pressure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;fy_viscous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;fy_porous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">8</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;fz_pressure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;fz_viscous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">6</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;fz_porous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">9</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mx_pressure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">10</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mx_viscous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">13</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mx_porous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">16</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;my_pressure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">11</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;my_viscous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">14</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;my_porous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">17</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mz_pressure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">12</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mz_viscous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">15</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mz_porous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">18</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">fm</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;f&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">fm</span> <span class="o">+</span> <span class="n">component</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">fm</span> <span class="o">+</span> <span class="n">component</span> <span class="o">+</span> <span class="s2">&quot;_pressure&quot;</span><span class="p">]</span> \
+                               <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="n">fm</span> <span class="o">+</span> <span class="n">component</span> <span class="o">+</span> <span class="s2">&quot;_viscous&quot;</span><span class="p">]</span> \
+                               <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="n">fm</span> <span class="o">+</span> <span class="n">component</span> <span class="o">+</span> <span class="s2">&quot;_porous&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="load_probes_data"><a class="viewcode-back" href="../../foampy.html#foampy.core.load_probes_data">[docs]</a><span class="k">def</span> <span class="nf">load_probes_data</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">object_name</span><span class="o">=</span><span class="s2">&quot;probes&quot;</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                     <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;U&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load probes data as pandas ``DataFrame``.&quot;&quot;&quot;</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">casedir</span><span class="p">,</span> <span class="s2">&quot;postProcessing&quot;</span><span class="p">,</span> <span class="n">object_name</span><span class="p">,</span>
+                         <span class="nb">str</span><span class="p">(</span><span class="n">start_time</span><span class="p">),</span> <span class="n">field_name</span><span class="p">)</span>
+    <span class="c1"># First get probe locations to use as column names</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">probe_lines</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;# Probe \d.*\n&quot;</span><span class="p">,</span> <span class="n">txt</span><span class="p">)</span>
+    <span class="n">probe_locs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">probe_lines</span><span class="p">:</span>
+        <span class="n">probe_locs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">gen_stripped_lines</span><span class="p">(</span><span class="n">fpath</span><span class="p">))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Determine the rank of the data</span>
+    <span class="n">nprobes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">probe_locs</span><span class="p">)</span>
+    <span class="n">nsamps</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">nprobes</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">probe_loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">probe_locs</span><span class="p">):</span>
+        <span class="n">probe_loc</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span> <span class="k">for</span> <span class="n">pl</span> <span class="ow">in</span> <span class="n">probe_loc</span><span class="p">]</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span> <span class="o">+</span> <span class="n">dims</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">d</span><span class="p">]</span>
+        <span class="n">df</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">probe_loc</span><span class="p">)]</span> <span class="o">=</span> <span class="n">d</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="load_torque_drag"><a class="viewcode-back" href="../../foampy.html#foampy.core.load_torque_drag">[docs]</a><span class="k">def</span> <span class="nf">load_torque_drag</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">torque_axis</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="n">drag_axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads time, z-axis torque, and streamwise force from specified forces</span>
+<span class="sd">    folder. Case name can be left empty if running within a case folder.&quot;&quot;&quot;</span>
+    <span class="c1"># Create empty lists</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fpx</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">fpy</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">fpz</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fpox</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">fpoy</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">fpoz</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fvx</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">fvy</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">fvz</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mpx</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">mpy</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">mpz</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mpox</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">mpoy</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">mpoz</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mvx</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">mvy</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">mvz</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Cycle through file</span>
+    <span class="k">if</span> <span class="n">casedir</span><span class="p">:</span> <span class="n">casedir</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">:</span> <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;forces.dat&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">casedir</span><span class="o">+</span><span class="s2">&quot;postProcessing/forces/&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;#&quot;</span><span class="p">:</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="n">fpx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">fpy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                <span class="n">fpz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+                <span class="n">fvx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
+                <span class="n">fvy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+                <span class="n">fvz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">6</span><span class="p">]))</span>
+                <span class="n">fpox</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">7</span><span class="p">]))</span>
+                <span class="n">fpoy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">8</span><span class="p">]))</span>
+                <span class="n">fpoz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">9</span><span class="p">]))</span>
+                <span class="n">mpx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">10</span><span class="p">]))</span>
+                <span class="n">mpy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">11</span><span class="p">]))</span>
+                <span class="n">mpz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">12</span><span class="p">]))</span>
+                <span class="n">mvx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">13</span><span class="p">]))</span>
+                <span class="n">mvy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">14</span><span class="p">]))</span>
+                <span class="n">mvz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">15</span><span class="p">]))</span>
+                <span class="n">mpox</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">16</span><span class="p">]))</span>
+                <span class="n">mpoy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">17</span><span class="p">]))</span>
+                <span class="n">mpoz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">18</span><span class="p">]))</span>
+    <span class="c1">#Convert to numpy arrays</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">torque_axis</span> <span class="o">==</span> <span class="s2">&quot;z&quot;</span><span class="p">:</span>
+        <span class="n">torque</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mpz</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mvz</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">torque_axis</span> <span class="o">==</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+        <span class="n">torque</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mpx</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mvx</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">drag_axis</span> <span class="o">==</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+        <span class="n">drag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fpx</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fvx</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">torque</span><span class="p">,</span> <span class="n">drag</span></div>
+
+
+<div class="viewcode-block" id="load_all_torque_drag"><a class="viewcode-back" href="../../foampy.html#foampy.core.load_all_torque_drag">[docs]</a><span class="k">def</span> <span class="nf">load_all_torque_drag</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">torque_axis</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="n">drag_axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">):</span>
+    <span class="n">t</span><span class="p">,</span> <span class="n">torque</span><span class="p">,</span> <span class="n">drag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="k">if</span> <span class="n">casedir</span><span class="p">:</span> <span class="n">casedir</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+    <span class="n">folders</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">casedir</span><span class="o">+</span><span class="s2">&quot;postProcessing/forces&quot;</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">casedir</span><span class="o">+</span><span class="s2">&quot;postProcessing/forces/&quot;</span><span class="o">+</span><span class="n">folder</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">t1</span><span class="p">,</span> <span class="n">torque1</span><span class="p">,</span> <span class="n">drag1</span> <span class="o">=</span> <span class="n">load_torque_drag</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="n">casedir</span><span class="p">,</span>
+                                                  <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">,</span>
+                                                  <span class="n">filename</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>
+                                                  <span class="n">torque_axis</span><span class="o">=</span><span class="n">torque_axis</span><span class="p">,</span>
+                                                  <span class="n">drag_axis</span><span class="o">=</span><span class="n">drag_axis</span><span class="p">)</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span>
+            <span class="n">torque</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torque</span><span class="p">,</span> <span class="n">torque1</span><span class="p">)</span>
+            <span class="n">drag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">drag</span><span class="p">,</span> <span class="n">drag1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">torque</span><span class="p">,</span> <span class="n">drag</span></div>
+
+
+<div class="viewcode-block" id="load_theta_omega"><a class="viewcode-back" href="../../foampy.html#foampy.core.load_theta_omega">[docs]</a><span class="k">def</span> <span class="nf">load_theta_omega</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">t_interp</span><span class="o">=</span><span class="p">[],</span> <span class="n">theta_units</span><span class="o">=</span><span class="s2">&quot;degrees&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Import omega from ``dynamicMeshDict`` table. Returns t, theta,</span>
+<span class="sd">    omega (rad/s) where theta is calculated using the trapezoidal rule.</span>
+
+<span class="sd">    `t_interp` is a keyword argument for an array over which omega and theta</span>
+<span class="sd">    will be interpolated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">casedir</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">casedir</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">casedir</span><span class="o">+</span><span class="s2">&quot;constant/dynamicMeshDict&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\d+.\d+&quot;</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="n">omega</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="c1"># Integrate omega to obtain theta</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+        <span class="n">theta</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">omega</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="n">t</span><span class="p">[:</span><span class="n">n</span><span class="p">])</span>
+    <span class="c1"># If provided, interpolate omega to match t vector</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t_interp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">t_interp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">omega</span><span class="p">)</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">t_interp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">theta_units</span> <span class="o">==</span> <span class="s2">&quot;degrees&quot;</span><span class="p">:</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">180</span>
+    <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">omega</span></div>
+
+
+<div class="viewcode-block" id="load_set"><a class="viewcode-back" href="../../foampy.html#foampy.core.load_set">[docs]</a><span class="k">def</span> <span class="nf">load_set</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;xy&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;xyz&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Import text data created with the OpenFOAM sample utility.&quot;&quot;&quot;</span>
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">casedir</span><span class="p">,</span> <span class="s2">&quot;postProcessing&quot;</span><span class="p">,</span> <span class="s2">&quot;sets&quot;</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">time1</span> <span class="ow">in</span> <span class="n">times</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">time1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">times</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">time1</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time1</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">time1</span><span class="p">))</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;time&quot;</span> <span class="p">:</span> <span class="n">t</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{folder}</span><span class="s2">/</span><span class="si">{time}</span><span class="s2">/</span><span class="si">{name}</span><span class="s2">_</span><span class="si">{q}</span><span class="s2">.</span><span class="si">{fmt}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">,</span>
+            <span class="n">time</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">quantity</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s2">&quot;U&quot;</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">ts</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;u&quot;</span> <span class="p">:</span> <span class="n">d</span><span class="p">[:,</span> <span class="nb">len</span><span class="p">(</span><span class="n">axis</span><span class="p">)],</span>
+                            <span class="s2">&quot;v&quot;</span> <span class="p">:</span> <span class="n">d</span><span class="p">[:,</span> <span class="nb">len</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="s2">&quot;w&quot;</span> <span class="p">:</span> <span class="n">d</span><span class="p">[:,</span> <span class="nb">len</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">]}</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">ts</span><span class="p">][</span><span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">ts</span><span class="p">][</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">ts</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">ts</span><span class="p">][</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="load_sample_xy"><a class="viewcode-back" href="../../foampy.html#foampy.core.load_sample_xy">[docs]</a><span class="k">def</span> <span class="nf">load_sample_xy</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s2">&quot;U&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Import text data created with the OpenFOAM sample utility.&quot;&quot;&quot;</span>
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">casedir</span><span class="p">,</span> <span class="s2">&quot;postProcessing&quot;</span><span class="p">,</span> <span class="s2">&quot;sets&quot;</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">time1</span> <span class="ow">in</span> <span class="n">times</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">time1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">times</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">time1</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time1</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">time1</span><span class="p">))</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="c1"># Load a y vector from a single file since they are identical</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">folder</span><span class="o">+</span><span class="s2">&quot;/0/profile_&quot;</span><span class="o">+</span><span class="n">profile</span><span class="o">+</span><span class="s2">&quot;.xy&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">f</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">profile</span> <span class="o">==</span> <span class="s2">&quot;U&quot;</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)))</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)))</span>
+    <span class="k">elif</span> <span class="n">profile</span> <span class="o">==</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span>
+        <span class="n">uu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)))</span>
+        <span class="n">uv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)))</span>
+        <span class="n">uw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)))</span>
+        <span class="n">vv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)))</span>
+        <span class="n">vw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)))</span>
+        <span class="n">ww</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">folder</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;/profile_&quot;</span><span class="o">+</span><span class="n">profile</span><span class="o">+</span><span class="s2">&quot;.xy&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">profile</span> <span class="o">==</span> <span class="s2">&quot;U&quot;</span><span class="p">:</span>
+                <span class="n">u</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">v</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">profile</span> <span class="o">==</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span>
+                <span class="n">uu</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">uv</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">uw</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">vv</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">4</span><span class="p">]</span>
+                <span class="n">vw</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span>
+                <span class="n">ww</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">6</span><span class="p">]</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">profile</span> <span class="o">==</span> <span class="s2">&quot;U&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;t&quot;</span> <span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="s2">&quot;u&quot;</span> <span class="p">:</span> <span class="n">u</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="n">v</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span> <span class="p">:</span> <span class="n">y</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">profile</span> <span class="o">==</span> <span class="s2">&quot;R&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;t&quot;</span> <span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="s2">&quot;uu&quot;</span> <span class="p">:</span> <span class="n">uu</span><span class="p">,</span> <span class="s2">&quot;vv&quot;</span><span class="p">:</span> <span class="n">vv</span><span class="p">,</span> <span class="s2">&quot;ww&quot;</span> <span class="p">:</span> <span class="n">ww</span><span class="p">,</span>
+                <span class="s2">&quot;uv&quot;</span> <span class="p">:</span> <span class="n">uv</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span> <span class="p">:</span> <span class="n">y</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="get_endtime"><a class="viewcode-back" href="../../foampy.html#foampy.core.get_endtime">[docs]</a><span class="k">def</span> <span class="nf">get_endtime</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get run ``endTime``.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;system/controlDict&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;endTime&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;endTime&quot;</span><span class="p">:</span>
+                <span class="n">endtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">endtime</span></div>
+
+
+<div class="viewcode-block" id="get_deltat"><a class="viewcode-back" href="../../foampy.html#foampy.core.get_deltat">[docs]</a><span class="k">def</span> <span class="nf">get_deltat</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get run ``deltaT``.&quot;&quot;&quot;</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">casedir</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;controlDict&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;deltaT&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;deltaT&quot;</span><span class="p">:</span>
+                <span class="n">deltat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">deltat</span></div>
+
+
+<div class="viewcode-block" id="get_ncells"><a class="viewcode-back" href="../../foampy.html#foampy.core.get_ncells">[docs]</a><span class="k">def</span> <span class="nf">get_ncells</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">logname</span><span class="o">=</span><span class="s2">&quot;log.checkMesh&quot;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="s2">&quot;cells&quot;</span><span class="p">,</span>
+               <span class="n">autogen</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">casedir</span><span class="p">,</span> <span class="n">logname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span> <span class="ow">and</span> <span class="n">autogen</span><span class="p">:</span>
+        <span class="n">start_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">casedir</span><span class="p">)</span>
+        <span class="n">run</span><span class="p">(</span><span class="s2">&quot;checkMesh&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="s2">&quot;-time 0&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">start_dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">keyword</span> <span class="o">==</span> <span class="s2">&quot;cells&quot;</span><span class="p">:</span>
+        <span class="n">keyword</span> <span class="o">=</span> <span class="s2">&quot;cells:&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="n">ls</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ls</span> <span class="ow">and</span> <span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">keyword</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_max_courant_no"><a class="viewcode-back" href="../../foampy.html#foampy.core.get_max_courant_no">[docs]</a><span class="k">def</span> <span class="nf">get_max_courant_no</span><span class="p">():</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;system/controlDict&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s2">&quot;;&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">ls</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;maxCo&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="read_dict"><a class="viewcode-back" href="../../foampy.html#foampy.core.read_dict">[docs]</a><span class="k">def</span> <span class="nf">read_dict</span><span class="p">(</span><span class="n">dictname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dictpath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read an OpenFOAM dict into a Python dict. Right now this is quite</span>
+<span class="sd">    crude, but gets the job done decently for 1 word parameters.&quot;&quot;&quot;</span>
+    <span class="n">foamdict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">dictpath</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dictname</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dictname</span> <span class="ow">in</span> <span class="n">system_dicts</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="s2">&quot;system/&quot;</span> <span class="o">+</span> <span class="n">dictname</span>
+        <span class="k">elif</span> <span class="n">dictname</span> <span class="ow">in</span> <span class="n">constant_dicts</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="s2">&quot;constant/&quot;</span> <span class="o">+</span> <span class="n">dictname</span>
+        <span class="n">dictpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">casedir</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dictpath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s2">&quot;;&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">foamdict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">foamdict</span></div>
+
+
+<div class="viewcode-block" id="read_case"><a class="viewcode-back" href="../../foampy.html#foampy.core.read_case">[docs]</a><span class="k">def</span> <span class="nf">read_case</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Will eventually read all case dicts and put in a hierarchy of dicts.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="gen_dynmeshdict"><a class="viewcode-back" href="../../foampy.html#foampy.core.gen_dynmeshdict">[docs]</a><span class="k">def</span> <span class="nf">gen_dynmeshdict</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">meantsr</span><span class="p">,</span> <span class="n">cellzone</span><span class="o">=</span><span class="s2">&quot;AMIsurface&quot;</span><span class="p">,</span> <span class="n">rpm_fluc</span><span class="o">=</span><span class="mf">3.7</span><span class="p">,</span>
+                    <span class="n">npoints</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;(0 0 1)&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generates a dynamicMeshDict for a given U, R, meantsr, and an optional</span>
+<span class="sd">    rpm fluctuation amplitude. Phase is fixed.&quot;&quot;&quot;</span>
+    <span class="n">meanomega</span> <span class="o">=</span> <span class="n">meantsr</span><span class="o">*</span><span class="n">U</span><span class="o">/</span><span class="n">R</span>
+    <span class="k">if</span> <span class="n">npoints</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">amp_omega</span> <span class="o">=</span> <span class="n">rpm_fluc</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">60.0</span>
+        <span class="n">endtime</span> <span class="o">=</span> <span class="n">get_endtime</span><span class="p">()</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">endtime</span><span class="p">,</span> <span class="n">npoints</span><span class="p">)</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">meanomega</span> <span class="o">+</span> <span class="n">amp_omega</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">meanomega</span><span class="o">*</span><span class="n">t</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">1.2</span><span class="p">)</span>
+    <span class="c1"># Write to file</span>
+    <span class="n">top</span> <span class="o">=</span> \
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;/*--------------------------------*- C++ -*----------------------------------*\</span>
+<span class="sd">| =========                 |                                                 |</span>
+<span class="sd">| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |</span>
+<span class="sd">|  \\    /   O peration     | Version:  2.3.x                                 |</span>
+<span class="sd">|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |</span>
+<span class="sd">|    \\/     M anipulation  |                                                 |</span>
+<span class="sd">\*---------------------------------------------------------------------------*/</span>
+<span class="sd">FoamFile</span>
+<span class="sd">{</span>
+<span class="sd">    version     2.0;</span>
+<span class="sd">    format      ascii;</span>
+<span class="sd">    class       dictionary;</span>
+<span class="sd">    object      dynamicMeshDict;</span>
+<span class="sd">}</span>
+
+
+<span class="sd">dynamicFvMesh   solidBodyMotionFvMesh;</span>
+
+<span class="sd">motionSolverLibs (&quot;libfvMotionSolvers.so&quot;);</span>
+
+<span class="sd">solidBodyMotionFvMeshCoeffs</span>
+<span class="sd">{</span>
+<span class="sd">    cellZone        &quot;&quot;&quot;</span> <span class="o">+</span> <span class="n">cellzone</span> <span class="o">+</span><span class="s2">&quot;&quot;&quot;;</span>
+<span class="s2">    solidBodyMotionFunction  rotatingMotion;</span>
+<span class="s2">    rotatingMotionCoeffs</span>
+<span class="s2">    {</span>
+<span class="s2">        origin</span><span class="se">\t\t</span><span class="s2">(0 0 0);</span>
+<span class="s2">        axis</span><span class="se">\t\t</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">+</span> <span class="n">axis</span> <span class="o">+</span> <span class="s2">&quot;;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="n">npoints</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">top</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;        omega</span><span class="se">\t\t</span><span class="s2">table</span>
+<span class="s2">        (</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Table should be in form</span>
+<span class="sd">        		(t0 omega0)</span>
+<span class="sd">        		(t1 omega1)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">table</span> <span class="o">+=</span> <span class="s2">&quot;            (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">omega</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">table</span> <span class="o">+=</span> <span class="s2">&quot;            (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">omega</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+        <span class="n">bottom</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        );</span>
+<span class="s2">    }</span>
+<span class="s2">}&quot;&quot;&quot;</span>
+        <span class="n">alltxt</span> <span class="o">=</span> <span class="n">top</span> <span class="o">+</span> <span class="n">table</span> <span class="o">+</span> <span class="n">bottom</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">alltxt</span> <span class="o">=</span> <span class="n">top</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">        omega</span><span class="se">\t\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">direction</span><span class="o">*</span><span class="n">meanomega</span><span class="p">)</span>\
+                <span class="o">+</span> <span class="s2">&quot;;</span><span class="se">\n</span><span class="s2">    }</span><span class="se">\n</span><span class="s2">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;constant/dynamicMeshDict&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">alltxt</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_solver_times"><a class="viewcode-back" href="../../foampy.html#foampy.core.get_solver_times">[docs]</a><span class="k">def</span> <span class="nf">get_solver_times</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log_fpath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">400</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read last N lines from file solver log and return t (current Time),</span>
+<span class="sd">    `deltaT`, and `clockTime`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">log_fpath</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">solver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">log_fpath</span> <span class="o">=</span> <span class="s2">&quot;log.&quot;</span> <span class="o">+</span> <span class="n">read_dict</span><span class="p">(</span><span class="s2">&quot;controlDict&quot;</span><span class="p">,</span>
+                                       <span class="n">casedir</span><span class="o">=</span><span class="n">casedir</span><span class="p">)[</span><span class="s2">&quot;application&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">log_fpath</span><span class="p">):</span>
+            <span class="n">log_fpath</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">casedir</span><span class="p">,</span> <span class="s2">&quot;log.*Foam&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">log_fpath</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">solver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">log_fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">casedir</span><span class="p">,</span> <span class="s2">&quot;log.&quot;</span> <span class="o">+</span> <span class="n">solver</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_fpath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">BUFSIZ</span> <span class="o">=</span> <span class="mi">1024</span>
+        <span class="c1"># True if open() was overridden and file was opened in text</span>
+        <span class="c1"># mode. In that case readlines() will return unicode strings</span>
+        <span class="c1"># instead of bytes.</span>
+        <span class="n">encoded</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">CR</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">encoded</span> <span class="k">else</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">encoded</span> <span class="k">else</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>
+        <span class="n">fsize</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">exit</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">exit</span><span class="p">:</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="p">(</span><span class="n">block</span> <span class="o">*</span> <span class="n">BUFSIZ</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">fsize</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">newdata</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">BUFSIZ</span> <span class="o">-</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">-</span> <span class="n">fsize</span><span class="p">))</span>
+                <span class="n">exit</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>
+                <span class="n">newdata</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">BUFSIZ</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">newdata</span> <span class="o">+</span> <span class="n">data</span>
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">CR</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">window</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">block</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="o">-</span><span class="n">window</span><span class="p">:]</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">clocktime</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">exectime</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">deltat</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;Time&quot;</span><span class="p">:</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="sa">b</span><span class="s2">&quot;ClockTime&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">clocktime</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="sa">b</span><span class="s2">&quot;ExecutionTime&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">exectime</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="sa">b</span><span class="s2">&quot;deltaT&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">deltat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="s2">&quot;delta_t&quot;</span><span class="p">:</span> <span class="n">deltat</span><span class="p">,</span> <span class="s2">&quot;exectime&quot;</span><span class="p">:</span> <span class="n">exectime</span><span class="p">,</span>
+            <span class="s2">&quot;clocktime&quot;</span><span class="p">:</span> <span class="n">clocktime</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="monitor_progress"><a class="viewcode-back" href="../../foampy.html#foampy.core.monitor_progress">[docs]</a><span class="k">def</span> <span class="nf">monitor_progress</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Monitor solver progress.&quot;&quot;&quot;</span>
+    <span class="n">controldict</span> <span class="o">=</span> <span class="n">read_dict</span><span class="p">(</span><span class="s2">&quot;controlDict&quot;</span><span class="p">)</span>
+    <span class="n">endtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">controldict</span><span class="p">[</span><span class="s2">&quot;endTime&quot;</span><span class="p">])</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;./&quot;</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">==</span> <span class="n">endtime</span><span class="p">:</span>
+                        <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="n">solver_times</span> <span class="o">=</span> <span class="n">get_solver_times</span><span class="p">()</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">solver_times</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+            <span class="n">deltat</span> <span class="o">=</span> <span class="n">solver_times</span><span class="p">[</span><span class="s2">&quot;delta_t&quot;</span><span class="p">]</span>
+            <span class="n">exectime</span> <span class="o">=</span> <span class="n">solver_times</span><span class="p">[</span><span class="s2">&quot;exectime&quot;</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">t_per_step</span> <span class="o">=</span> <span class="n">exectime</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">exectime</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">tps2</span> <span class="o">=</span> <span class="n">exectime</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">exectime</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">t_per_step</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_per_step</span> <span class="o">+</span> <span class="n">tps2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="n">solver_times</span> <span class="o">=</span> <span class="n">get_solver_times</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">solver_times</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+                <span class="n">deltat</span> <span class="o">=</span> <span class="n">solver_times</span><span class="p">[</span><span class="s2">&quot;delta_t&quot;</span><span class="p">]</span>
+                <span class="n">exectime</span> <span class="o">=</span> <span class="n">solver_times</span><span class="p">[</span><span class="s2">&quot;exectime&quot;</span><span class="p">]</span>
+                <span class="n">t_per_step</span> <span class="o">=</span> <span class="n">exectime</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">exectime</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">deltat</span> <span class="o">=</span> <span class="n">deltat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="n">deltat</span> <span class="o">=</span> <span class="n">get_deltat</span><span class="p">()</span>
+            <span class="n">percent_done</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">endtime</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+            <span class="n">time_left</span><span class="p">,</span> <span class="n">solve_rate</span> <span class="o">=</span> <span class="n">endtime</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">t_per_step</span><span class="o">/</span><span class="n">deltat</span><span class="o">/</span><span class="mi">3600</span>
+            <span class="n">slt</span> <span class="o">=</span> <span class="n">time_left</span><span class="o">*</span><span class="n">solve_rate</span>
+            <span class="n">solve_time_left</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">slt</span><span class="p">))[:</span><span class="o">-</span><span class="mi">7</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">*</span><span class="mi">66</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">[</span><span class="si">{}</span><span class="s2">%] - solving at </span><span class="si">{:0.2f}</span><span class="s2"> h/s - </span><span class="si">{}</span><span class="s2"> remaining&quot;</span><span class="o">.</span><span class="n">format</span>\
+                    <span class="p">(</span><span class="n">percent_done</span><span class="p">,</span> <span class="n">solve_rate</span><span class="p">,</span> <span class="n">solve_time_left</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">End&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read_log_end"><a class="viewcode-back" href="../../foampy.html#foampy.core.read_log_end">[docs]</a><span class="k">def</span> <span class="nf">read_log_end</span><span class="p">(</span><span class="n">logname</span><span class="p">,</span> <span class="n">nlines</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read last lines from log and return as a list.&quot;&quot;&quot;</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">nlines</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;log.&quot;</span><span class="o">+</span><span class="n">logname</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">BUFSIZ</span> <span class="o">=</span> <span class="mi">1024</span>
+        <span class="c1"># True if open() was overridden and file was opened in text</span>
+        <span class="c1"># mode. In that case readlines() will return unicode strings</span>
+        <span class="c1"># instead of bytes.</span>
+        <span class="n">encoded</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;encoding&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">CR</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">encoded</span> <span class="k">else</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">encoded</span> <span class="k">else</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>
+        <span class="n">fsize</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">exit</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">exit</span><span class="p">:</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="p">(</span><span class="n">block</span> <span class="o">*</span> <span class="n">BUFSIZ</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">fsize</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">newdata</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">BUFSIZ</span> <span class="o">-</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">-</span> <span class="n">fsize</span><span class="p">))</span>
+                <span class="n">exit</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>
+                <span class="n">newdata</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">BUFSIZ</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">newdata</span> <span class="o">+</span> <span class="n">data</span>
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">CR</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">window</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">block</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="o">-</span><span class="n">window</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="get_n_processors"><a class="viewcode-back" href="../../foampy.html#foampy.core.get_n_processors">[docs]</a><span class="k">def</span> <span class="nf">get_n_processors</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">dictpath</span><span class="o">=</span><span class="s2">&quot;system/decomposeParDict&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read number of processors from decomposeParDict.&quot;&quot;&quot;</span>
+    <span class="n">dictpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">casedir</span><span class="p">,</span> <span class="n">dictpath</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dictpath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;numberOfSubdomains&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../foampy.html#foampy.core.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="n">tee</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">logname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nproc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run an application.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">logname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logname</span> <span class="o">=</span> <span class="s2">&quot;log.&quot;</span> <span class="o">+</span> <span class="n">appname</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">logname</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">append</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">logname</span> <span class="o">+</span> <span class="s2">&quot; exists; remove or use overwrite=True&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nproc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nproc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">parallel</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">parallel</span> <span class="ow">and</span> <span class="n">nproc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">nproc</span> <span class="o">=</span> <span class="n">get_n_processors</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;mpirun -np </span><span class="si">{nproc}</span><span class="s2"> </span><span class="si">{app}</span><span class="s2"> -parallel </span><span class="si">{args}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{app}</span><span class="s2"> </span><span class="si">{args}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="n">tee</span><span class="p">:</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; 2&gt;&amp;1 | tee </span><span class="si">{logname}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">append</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; -a&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; &gt; </span><span class="si">{logname}</span><span class="s2"> 2&gt;&amp;1&quot;</span>
+        <span class="k">if</span> <span class="n">append</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &gt; &quot;</span><span class="p">,</span> <span class="s2">&quot; &gt;&gt; &quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running </span><span class="si">{appname}</span><span class="s2"> on </span><span class="si">{n}</span><span class="s2"> processors&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">appname</span><span class="o">=</span><span class="n">appname</span><span class="p">,</span>
+              <span class="n">n</span><span class="o">=</span><span class="n">nproc</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running &quot;</span> <span class="o">+</span> <span class="n">appname</span><span class="p">)</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nproc</span><span class="o">=</span><span class="n">nproc</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">appname</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+                               <span class="n">logname</span><span class="o">=</span><span class="n">logname</span><span class="p">),</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="run_parallel"><a class="viewcode-back" href="../../foampy.html#foampy.core.run_parallel">[docs]</a><span class="k">def</span> <span class="nf">run_parallel</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run application in parallel.&quot;&quot;&quot;</span>
+    <span class="n">run</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="summary"><a class="viewcode-back" href="../../foampy.html#foampy.core.summary">[docs]</a><span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Summarize a case and return as a pandas Series.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    casedir : str</span>
+<span class="sd">        Case directory to be summarized.</span>
+<span class="sd">    extra_params : dict</span>
+<span class="sd">        Key/value pairs for keywords and the functions that return their</span>
+<span class="sd">        respective values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">()</span>
+    <span class="n">s</span><span class="p">[</span><span class="s2">&quot;delta_t&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_deltat</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="n">casedir</span><span class="p">)</span>
+    <span class="n">s</span><span class="p">[</span><span class="s2">&quot;n_cells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_ncells</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="n">casedir</span><span class="p">)</span>
+    <span class="n">td</span> <span class="o">=</span> <span class="n">get_solver_times</span><span class="p">(</span><span class="n">casedir</span><span class="o">=</span><span class="n">casedir</span><span class="p">)</span>
+    <span class="n">s</span><span class="p">[</span><span class="s2">&quot;simulated_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">s</span><span class="p">[</span><span class="s2">&quot;clocktime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="s2">&quot;clocktime&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">s</span><span class="p">[</span><span class="s2">&quot;exectime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="s2">&quot;exectime&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">extra_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">s</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="clean"><a class="viewcode-back" href="../../foampy.html#foampy.core.clean">[docs]</a><span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="n">leave_mesh</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">remove_zero</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;Clean case.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">leave_mesh</span><span class="p">:</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s2">&quot;. $WM_PROJECT_DIR/bin/tools/CleanFunctions &amp;&amp; &quot;</span>
+                        <span class="s2">&quot;cleanCase&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s2">&quot;. $WM_PROJECT_DIR/bin/tools/CleanFunctions &amp;&amp; &quot;</span>
+                        <span class="s2">&quot;cleanTimeDirectories &amp;&amp; cleanDynamicCode&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s2">&quot;rm -rf postProcessing&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">remove_zero</span><span class="p">:</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s2">&quot;rm -rf 0&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">extra</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">extra</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">extra</span> <span class="o">=</span> <span class="p">[</span><span class="n">extra</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Removing&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s2">&quot;rm -rf </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">),</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Pete Bachant.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -5,7 +5,7 @@
 SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
 SPHINXPROJ    = foamPy
-SOURCEDIR     = .
+SOURCEDIR     = source
 BUILDDIR      = _build
 
 # Put it first so that "make" without argument is like "make help".
@@ -15,7 +15,7 @@ help:
 .PHONY: help Makefile apidoc deploy
 
 apidoc:
-	cd .. && sphinx-apidoc foampy -o docs
+	cd .. && sphinx-apidoc foampy -o docs/source
 
 deploy:
 	cp -rf ${BUILDDIR}/html/* .

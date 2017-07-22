@@ -1,4 +1,4 @@
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 import os
 
@@ -13,3 +13,4 @@ from .core import *
 from . import dictionaries
 from . import foil
 from . import types
+from . import templates

@@ -39,6 +39,8 @@ def make_template(fpath, template_dir="templates", keywords=[], git=True,
         os.makedirs(template_subdir)
     with open(fpath) as f:
         txt = f.read()
+    txt = txt.replace("{", "{{")
+    txt = txt.replace("}", "}}")
     new_txt = ""
     for line in txt.split("\n"):
         for kw in keywords:
@@ -52,8 +54,9 @@ def make_template(fpath, template_dir="templates", keywords=[], git=True,
     if git and delete:
         try:
             subprocess.call("git rm -f " + fpath, shell=True)
-        except subprocess.CalledProcessError:
-            print("Git not found")
+        except subprocess.CalledProcessError as e:
+            print("Could not remove file from Git repo")
+            print(e)
             os.remove(fpath)
     elif delete:
         os.remove(fpath)
@@ -63,6 +66,7 @@ def make_template(fpath, template_dir="templates", keywords=[], git=True,
             with open(".gitignore") as f:
                 txt = f.read()
             if not fpath in txt.split("\n"):
+                print("Adding", fpath, "to .gitignore")
                 if not txt.endswith("\n"):
                     txt += "\n"
                 txt += fpath + "\n"
